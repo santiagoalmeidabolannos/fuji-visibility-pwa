@@ -131,20 +131,37 @@ function renderTodayCard(day) {
 
   const headline = topScore >= 8 ? 'VISIBLE' : topScore >= 5 ? 'PARTIAL' : topScore >= 3 ? 'HAZY' : 'NOT VISIBLE';
 
-  const dirCard = (label, dir) => `
+  // opacity 40%→100% based on score (score 0→10)
+  const slotOpacity = (score) => score != null ? Math.max(0.35, score / 10) : 0.35;
+
+  const slotBox = (slot, isNorth) => {
+    const score = slot?.score ?? null;
+    const pct = score != null ? (score * 10) + '%' : '—';
+    const opacity = slotOpacity(score);
+    const textColor = isNorth ? 'text-primary' : 'text-[#4d4542]';
+    const labelColor = isNorth ? 'text-outline' : 'text-[#4d4542]/60';
+    return `<div class="rounded-2xl p-3 flex-1" style="background:rgba(255,255,255,${opacity})">
+      <p class="font-label text-[10px] ${labelColor} uppercase tracking-tighter mb-1">{SLOT}</p>
+      <p class="font-headline font-extrabold text-xl ${textColor}">${pct}</p>
+      <p class="font-label text-[9px] ${labelColor} mt-0.5">${slot?.status ?? ''}</p>
+    </div>`;
+  };
+
+  const northCard = `
     <div class="rounded-3xl bg-surface-container-low p-6 flex flex-col gap-4">
-      <span class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label text-[10px] font-bold tracking-widest uppercase self-start">${label}</span>
+      <span class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label text-[10px] font-bold tracking-widest uppercase self-start">North · Kawaguchiko</span>
       <div class="flex gap-3">
-        <div class="bg-white rounded-2xl p-3 flex-1">
-          <p class="font-label text-[10px] text-outline uppercase tracking-tighter mb-1">Morning</p>
-          <p class="font-headline font-extrabold text-lg text-primary">${dir.morning?.score != null ? dir.morning.score + '/10' : '—'}</p>
-          <p class="font-label text-[9px] text-outline mt-0.5">${dir.morning?.status ?? ''}</p>
-        </div>
-        <div class="bg-white rounded-2xl p-3 flex-1">
-          <p class="font-label text-[10px] text-outline uppercase tracking-tighter mb-1">Afternoon</p>
-          <p class="font-headline font-extrabold text-lg text-primary">${dir.afternoon?.score != null ? dir.afternoon.score + '/10' : '—'}</p>
-          <p class="font-label text-[9px] text-outline mt-0.5">${dir.afternoon?.status ?? ''}</p>
-        </div>
+        ${slotBox(north.morning, true).replace('{SLOT}', 'Morning')}
+        ${slotBox(north.afternoon, true).replace('{SLOT}', 'Afternoon')}
+      </div>
+    </div>`;
+
+  const southCard = `
+    <div class="rounded-3xl bg-[#ece0db] p-6 flex flex-col gap-4">
+      <span class="px-3 py-1 rounded-full bg-[#4d4542]/10 text-[#4d4542] font-label text-[10px] font-bold tracking-widest uppercase self-start">South · Hakone</span>
+      <div class="flex gap-3">
+        ${slotBox(south.morning, false).replace('{SLOT}', 'Morning')}
+        ${slotBox(south.afternoon, false).replace('{SLOT}', 'Afternoon')}
       </div>
     </div>`;
 
@@ -154,11 +171,14 @@ function renderTodayCard(day) {
         <p class="font-label text-sm uppercase tracking-[0.2em] text-outline mb-1">${formatDateHeader(day.date)}</p>
         <h1 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter text-on-background">${headline}</h1>
       </div>
-      <span class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label text-[10px] font-bold tracking-widest uppercase">Today</span>
+      <div class="text-right">
+        <p class="font-label text-[10px] uppercase tracking-widest text-outline">Last Updated</p>
+        <p id="hero-last-updated" class="font-headline font-bold text-primary text-sm">—</p>
+      </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      ${dirCard('North · Kawaguchiko', north)}
-      ${dirCard('South · Hakone', south)}
+      ${northCard}
+      ${southCard}
     </div>`;
 }
 
@@ -200,17 +220,19 @@ function renderData(data) {
       : '<p class="last-updated" style="padding:12px 2px">No forecast data available.</p>';
   }
 
-  // Footer timestamp
+  // Timestamps
   const ts = data.meta?.lastScraped ?? data.updated_at ?? data.updated ?? null;
-  const lastUpdEl = document.getElementById('last-updated');
-  if (lastUpdEl && ts) {
+  if (ts) {
     const d = new Date(ts);
-    if (!isNaN(d)) {
-      lastUpdEl.textContent = `Updated ${d.toLocaleString('en-US', {
-        month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
-      })}`;
-    } else {
-      lastUpdEl.textContent = `Updated ${ts}`;
+    const formatted = !isNaN(d)
+      ? d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' })
+      : ts;
+    const footerEl = document.getElementById('last-updated');
+    if (footerEl) footerEl.textContent = `Updated ${formatted}`;
+    // Hero last updated (JST time only)
+    const heroEl = document.getElementById('hero-last-updated');
+    if (heroEl && !isNaN(d)) {
+      heroEl.textContent = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Tokyo', timeZoneName: 'short' });
     }
   }
 
