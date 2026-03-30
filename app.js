@@ -457,12 +457,19 @@ async function loadCameras() {
 
     const northEl = document.getElementById('cams-north');
     const southEl = document.getElementById('cams-south');
+    const westEl  = document.getElementById('cams-west');
+    const westSec = document.getElementById('section-west');
 
     const north = cameras.filter(c => c.side === 'north');
     const south = cameras.filter(c => c.side === 'south');
+    const west  = cameras.filter(c => c.side === 'west');
 
     if (northEl) northEl.innerHTML = north.length ? north.map(renderCameraCard).join('') : '<p class="text-outline text-sm">No north cameras available.</p>';
     if (southEl) southEl.innerHTML = south.length ? south.map(renderCameraCard).join('') : '<p class="text-outline text-sm">No south cameras available.</p>';
+    if (westEl && westSec) {
+      if (west.length) { westEl.innerHTML = west.map(renderCameraCard).join(''); westSec.classList.remove('hidden'); }
+      else westSec.classList.add('hidden');
+    }
 
     // Schedule thumbnail refresh every 10 min
     if (camRefreshTimer) clearTimeout(camRefreshTimer);
