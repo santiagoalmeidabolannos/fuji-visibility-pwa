@@ -198,7 +198,7 @@ function renderTodayCard(day) {
           <span class="font-headline font-bold text-sm">${ns.label}</span>
         </div>
       </div>
-      <h3 style="position:relative;z-index:10;margin-top:auto;margin-bottom:32px" class="font-headline text-2xl font-bold ${nt.text}">${ns.desc}</h3>
+      <h3 style="position:relative;z-index:10;margin-top:auto;margin-bottom:48px" class="font-headline text-2xl font-bold ${nt.text}">${ns.desc}</h3>
       <div style="position:relative;z-index:10;display:flex;gap:12px;padding-bottom:1.5rem">
         ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
         ${slotBox(north.afternoon, true, nt.label).replace('{SLOT}', 'Afternoon')}
@@ -216,7 +216,7 @@ function renderTodayCard(day) {
           <span class="font-headline font-bold text-sm">${ss.label}</span>
         </div>
       </div>
-      <h3 style="margin-top:auto;margin-bottom:32px" class="font-headline text-2xl font-bold ${st.text}">${ss.desc}</h3>
+      <h3 style="margin-top:auto;margin-bottom:48px" class="font-headline text-2xl font-bold ${st.text}">${ss.desc}</h3>
       <div style="display:flex;gap:12px;padding-bottom:1.5rem">
         ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
         ${slotBox(south.afternoon, false, st.label).replace('{SLOT}', 'Afternoon')}
