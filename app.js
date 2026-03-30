@@ -189,7 +189,7 @@ function renderTodayCard(day) {
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
   const northCard = `
-    <div class="relative overflow-hidden rounded-3xl p-6 flex flex-col min-h-[220px]" style="background:${nt.bg}">
+    <div class="relative overflow-hidden rounded-3xl pt-6 px-6 pb-0 flex flex-col min-h-[220px]" style="background:${nt.bg}">
       ${fujiSilhouette}
       <div class="relative z-10 flex justify-between items-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${nt.badge}">North · Kawaguchiko</span>
@@ -199,7 +199,7 @@ function renderTodayCard(day) {
         </div>
       </div>
       <h3 class="relative z-10 font-headline text-2xl font-bold mt-auto mb-4 ${nt.text}">${ns.desc}</h3>
-      <div class="relative z-10 flex gap-3">
+      <div class="relative z-10 flex gap-3 pb-6">
         ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
         ${slotBox(north.afternoon, true, nt.label).replace('{SLOT}', 'Afternoon')}
       </div>
@@ -208,7 +208,7 @@ function renderTodayCard(day) {
   const ss = dirSummary(south);
   const st = cardTheme(Math.max(south.morning?.score ?? 0, south.afternoon?.score ?? 0), false);
   const southCard = `
-    <div class="relative overflow-hidden rounded-3xl p-6 flex flex-col min-h-[220px]" style="background:${st.bg}">
+    <div class="relative overflow-hidden rounded-3xl pt-6 px-6 pb-0 flex flex-col min-h-[220px]" style="background:${st.bg}">
       <div class="flex justify-between items-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${st.badge}">South · Hakone</span>
         <div class="flex items-center gap-1 ${st.icon}">
@@ -217,7 +217,7 @@ function renderTodayCard(day) {
         </div>
       </div>
       <h3 class="font-headline text-2xl font-bold mt-auto mb-4 ${st.text}">${ss.desc}</h3>
-      <div class="flex gap-3">
+      <div class="flex gap-3 pb-6">
         ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
         ${slotBox(south.afternoon, false, st.label).replace('{SLOT}', 'Afternoon')}
       </div>
