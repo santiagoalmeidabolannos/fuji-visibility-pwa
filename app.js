@@ -278,12 +278,12 @@ function renderForecastCard(day, view = forecastView) {
   // Stitch design card styles
   const fcLabel = top >= 8 ? 'High' : top >= 5 ? 'Med' : top >= 3 ? 'Low' : 'None';
   const fcStyles = top >= 8
-    ? { bg: 'bg-surface-container-low', iconBg: 'bg-primary',           iconText: 'text-white',          lblColor: 'text-primary'   }
+    ? { bg: 'bg-surface-container-low', iconBg: 'bg-primary',            iconText: 'text-white',             lblColor: 'text-primary'   }
     : top >= 5
     ? { bg: 'bg-surface-container-low', iconBg: 'bg-tertiary-fixed-dim', iconText: 'text-on-tertiary-fixed', lblColor: 'text-tertiary'  }
     : top >= 3
-    ? { bg: 'bg-surface-container-low', iconBg: 'bg-secondary-container', iconText: 'text-secondary',      lblColor: 'text-outline'   }
-    : { bg: 'bg-surface-container-low', iconBg: 'bg-secondary-container', iconText: 'text-secondary',      lblColor: 'text-outline', opacity: '0.7' };
+    ? { bg: 'bg-secondary-fixed-dim',   iconBg: 'bg-secondary-container', iconText: 'text-secondary',        lblColor: 'text-outline'   }
+    : { bg: 'bg-secondary-fixed-dim',   iconBg: 'bg-secondary-container', iconText: 'text-secondary',        lblColor: 'text-outline', opacity: '0.7' };
 
   return `
     <article class="${fcStyles.bg} rounded-2xl p-5 flex flex-col items-center text-center space-y-4 border border-transparent hover:border-outline-variant/20 transition-all" style="opacity:${fcStyles.opacity ?? 1}">
