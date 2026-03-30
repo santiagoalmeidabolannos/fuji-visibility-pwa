@@ -199,7 +199,7 @@ function renderTodayCard(day) {
         </div>
       </div>
       <div style="flex:1"></div>
-      <div style="position:relative;z-index:10;display:flex;flex-direction:column;gap:24px">
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;gap:48px">
         <h3 style="margin:0" class="font-headline text-2xl font-bold ${nt.text}">${ns.desc}</h3>
         <div style="display:flex;gap:12px;padding-bottom:1.5rem">
           ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
@@ -220,7 +220,7 @@ function renderTodayCard(day) {
         </div>
       </div>
       <div style="flex:1"></div>
-      <div style="display:flex;flex-direction:column;gap:24px">
+      <div style="display:flex;flex-direction:column;gap:48px">
         <h3 style="margin:0" class="font-headline text-2xl font-bold ${st.text}">${ss.desc}</h3>
         <div style="display:flex;gap:12px;padding-bottom:1.5rem">
           ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
