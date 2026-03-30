@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fuji-visibility-pwa.vercel.app/sitemap.xml

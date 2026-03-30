@@ -3,7 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Real-time Mt. Fuji visibility forecast — see if Fuji is visible today">
+  <meta name="description" content="FujiSight — Is Mt. Fuji visible today? Check the real-time 8-day visibility forecast for North (Kawaguchiko) and South (Hakone) viewpoints, plus live camera feeds.">
+  <meta name="keywords" content="Mt Fuji visibility, is Fuji visible today, Kawaguchiko weather, Hakone Fuji view, mount fuji forecast, fuji live camera">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="FujiSight">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="FujiSight — Is Mt. Fuji Visible Today?">
+  <meta property="og:description" content="Real-time 8-day Mt. Fuji visibility forecast for north and south viewpoints, with live camera feeds.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://fuji-visibility-pwa.vercel.app">
+  <meta property="og:image" content="https://fuji-visibility-pwa.vercel.app/icons/icon.svg">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="FujiSight — Is Mt. Fuji Visible Today?">
+  <meta name="twitter:description" content="Real-time 8-day Mt. Fuji visibility forecast for north and south viewpoints, with live camera feeds.">
+
   <meta name="theme-color" content="#005ab6">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -68,7 +85,27 @@
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
-  <title>FujiSight</title>
+  <title>FujiSight — Is Mt. Fuji Visible Today?</title>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "FujiSight",
+    "url": "https://fuji-visibility-pwa.vercel.app",
+    "description": "Real-time 8-day Mt. Fuji visibility forecast for north and south viewpoints, with live camera feeds.",
+    "applicationCategory": "WeatherApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "about": {
+      "@type": "LandmarkOrHistoricalBuilding",
+      "name": "Mount Fuji",
+      "description": "Mount Fuji, the highest mountain in Japan at 3,776 meters.",
+      "geo": { "@type": "GeoCoordinates", "latitude": 35.3606, "longitude": 138.7274 }
+    }
+  }
+  </script>
 </head>
 <body class="bg-surface font-body text-on-background antialiased">
 
