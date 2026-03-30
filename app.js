@@ -52,6 +52,7 @@ function bestScore(day) {
 // API returns dates like "Mon, Mar 30" — use them directly
 
 function formatDateHeader(dateStr) {
+  if (!dateStr) return 'Today';
   // e.g. "Mon, Mar 30" → "Monday, March 30"
   const parts = dateStr.match(/^(\w+),\s+(\w+)\s+(\d+)$/);
   if (!parts) return dateStr;
@@ -61,6 +62,7 @@ function formatDateHeader(dateStr) {
 }
 
 function formatDateShort(dateStr) {
+  if (!dateStr) return { weekday: '—', month: '' };
   // e.g. "Mon, Mar 30" → { weekday: "Mon", month: "Mar 30" }
   const parts = dateStr.match(/^(\w+),\s+(\w+\s+\d+)$/);
   if (!parts) return { weekday: dateStr, month: '' };
@@ -203,9 +205,13 @@ function renderData(data) {
   const lastUpdEl = document.getElementById('last-updated');
   if (lastUpdEl && ts) {
     const d = new Date(ts);
-    lastUpdEl.textContent = `Updated ${d.toLocaleString('en-US', {
-      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
-    })}`;
+    if (!isNaN(d)) {
+      lastUpdEl.textContent = `Updated ${d.toLocaleString('en-US', {
+        month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+      })}`;
+    } else {
+      lastUpdEl.textContent = `Updated ${ts}`;
+    }
   }
 
   // Push widget data to cache via SW message
