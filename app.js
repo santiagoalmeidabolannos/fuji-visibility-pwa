@@ -183,13 +183,13 @@ function renderTodayCard(day) {
     </div>`;
   };
 
-  // Fuji silhouette SVG for north card background
-  const fujiSilhouette = `<svg class="absolute -right-6 bottom-0 opacity-[0.15] pointer-events-none" width="260" height="160" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"><path d="M0 340 L100 295 L195 245 L290 185 L355 130 L388 92 L400 68 L412 92 L445 130 L510 185 L605 245 L700 295 L800 340 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
+  // Fuji silhouette — cropped viewBox to right half of mountain, flush bottom
+  const fujiSilhouette = `<svg class="absolute -right-2 bottom-0 opacity-[0.18] pointer-events-none" width="220" height="180" viewBox="350 60 450 280" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMax meet"><path d="M0 340 L100 295 L195 245 L290 185 L355 130 L388 92 L400 68 L412 92 L445 130 L510 185 L605 245 L700 295 L800 340 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
 
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
   const northCard = `
-    <div class="relative overflow-hidden rounded-3xl p-6 flex flex-col gap-3 min-h-[220px]" style="background:${nt.bg}">
+    <div class="relative overflow-hidden rounded-3xl p-6 flex flex-col min-h-[220px]" style="background:${nt.bg}">
       ${fujiSilhouette}
       <div class="relative z-10 flex justify-between items-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${nt.badge}">North · Kawaguchiko</span>
@@ -198,7 +198,7 @@ function renderTodayCard(day) {
           <span class="font-headline font-bold text-sm">${ns.label}</span>
         </div>
       </div>
-      <h3 class="relative z-10 font-headline text-2xl font-bold mt-auto ${nt.text}">${ns.desc}</h3>
+      <h3 class="relative z-10 font-headline text-2xl font-bold mt-auto mb-3 ${nt.text}">${ns.desc}</h3>
       <div class="relative z-10 flex gap-3">
         ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
         ${slotBox(north.afternoon, true, nt.label).replace('{SLOT}', 'Afternoon')}
@@ -208,7 +208,7 @@ function renderTodayCard(day) {
   const ss = dirSummary(south);
   const st = cardTheme(Math.max(south.morning?.score ?? 0, south.afternoon?.score ?? 0), false);
   const southCard = `
-    <div class="relative overflow-hidden rounded-3xl p-6 flex flex-col gap-3 min-h-[220px]" style="background:${st.bg}">
+    <div class="relative overflow-hidden rounded-3xl p-6 flex flex-col min-h-[220px]" style="background:${st.bg}">
       <div class="flex justify-between items-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${st.badge}">South · Hakone</span>
         <div class="flex items-center gap-1 ${st.icon}">
@@ -216,7 +216,7 @@ function renderTodayCard(day) {
           <span class="font-headline font-bold text-sm">${ss.label}</span>
         </div>
       </div>
-      <h3 class="font-headline text-2xl font-bold mt-auto ${st.text}">${ss.desc}</h3>
+      <h3 class="font-headline text-2xl font-bold mt-auto mb-3 ${st.text}">${ss.desc}</h3>
       <div class="flex gap-3">
         ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
         ${slotBox(south.afternoon, false, st.label).replace('{SLOT}', 'Afternoon')}
@@ -255,21 +255,21 @@ function renderForecastCard(day) {
   // None (0-2):  #c0c5e0 slate blue opacity 70%, secondary icon
   const fcLabel = top >= 8 ? 'High' : top >= 5 ? 'Med' : top >= 3 ? 'Low' : 'None';
   const fcStyles = top >= 8
-    ? { bg: '#eff4ff', dateColor: 'text-outline',       iconBg: 'bg-primary',    iconText: 'text-white',     lblColor: 'text-primary'   }
+    ? { bg: '#eff4ff', textColor: '#0b1c30', dateColor: 'text-outline',     iconBg: 'bg-primary',    iconText: 'text-white',     lblColor: 'text-primary'   }
     : top >= 5
-    ? { bg: '#d0c4bf', dateColor: 'text-[#4d4542]',     iconBg: 'bg-[#ece0db]', iconText: 'text-[#4d4542]', lblColor: 'text-[#625a56]' }
+    ? { bg: '#d0c4bf', textColor: '#201a17', dateColor: 'text-[#4d4542]',   iconBg: 'bg-[#ece0db]', iconText: 'text-[#4d4542]', lblColor: 'text-[#625a56]' }
     : top >= 3
-    ? { bg: '#c0c5e0', dateColor: 'text-on-background', iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',  lblColor: 'text-secondary' }
-    : { bg: '#c0c5e0', dateColor: 'text-outline',       iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',  lblColor: 'text-outline',  opacity: '0.7' };
+    ? { bg: '#c0c5e0', textColor: '#0b1c30', dateColor: 'text-[#414753]',   iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',  lblColor: 'text-secondary' }
+    : { bg: '#c0c5e0', textColor: '#727785', dateColor: 'text-outline',     iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',  lblColor: 'text-outline',  opacity: '0.7' };
 
   return `
-    <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcStyles.bg};opacity:${fcStyles.opacity ?? 1}">
+    <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcStyles.bg};color:${fcStyles.textColor};opacity:${fcStyles.opacity ?? 1}">
       <p class="font-label text-[10px] ${fcStyles.dateColor} font-bold tracking-widest uppercase">${weekday}</p>
       <div class="w-11 h-11 rounded-full flex items-center justify-center ${fcStyles.iconBg} ${fcStyles.iconText}">
         <span class="material-symbols-outlined text-[20px]">${icon}</span>
       </div>
       <div>
-        <p class="font-headline font-extrabold text-xl">${fcLabel}</p>
+        <p class="font-headline font-extrabold text-xl" style="color:inherit">${fcLabel}</p>
         <p class="font-label text-[10px] ${fcStyles.lblColor} uppercase font-bold">${label}</p>
       </div>
     </article>`;
