@@ -189,7 +189,7 @@ function renderTodayCard(day) {
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
   const northCard = `
-    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:280px;background:${nt.bg}">
+    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:320px;background:${nt.bg}">
       ${fujiSilhouette}
       <div style="position:relative;z-index:10;display:flex;justify-content:space-between;align-items:flex-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${nt.badge}">North · Kawaguchiko</span>
@@ -208,7 +208,7 @@ function renderTodayCard(day) {
   const ss = dirSummary(south);
   const st = cardTheme(Math.max(south.morning?.score ?? 0, south.afternoon?.score ?? 0), false);
   const southCard = `
-    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:280px;background:${st.bg}">
+    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:320px;background:${st.bg}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${st.badge}">South · Hakone</span>
         <div class="flex items-center gap-1 ${st.icon}">
