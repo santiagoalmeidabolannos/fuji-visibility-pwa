@@ -184,7 +184,7 @@ function renderTodayCard(day) {
   };
 
   // Fuji silhouette — inline styles only (Tailwind CDN doesn't JIT dynamic classes)
-  const fujiSilhouette = `<svg style="position:absolute;right:-32px;bottom:-16px;opacity:0.18;pointer-events:none" width="320" height="200" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"><path d="M0 340 L100 295 L195 245 L290 185 L355 130 L388 92 L400 68 L412 92 L445 130 L510 185 L605 245 L700 295 L800 340 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
+  const fujiSilhouette = `<svg style="position:absolute;right:-32px;bottom:0;opacity:0.18;pointer-events:none" width="320" height="200" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"><path d="M0 340 L100 295 L195 245 L290 185 L355 130 L388 92 L400 68 L412 92 L445 130 L510 185 L605 245 L700 295 L800 340 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
 
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
@@ -198,7 +198,7 @@ function renderTodayCard(day) {
           <span class="font-headline font-bold text-sm">${ns.label}</span>
         </div>
       </div>
-      <h3 style="position:relative;z-index:10;margin-top:auto;margin-bottom:16px" class="font-headline text-2xl font-bold ${nt.text}">${ns.desc}</h3>
+      <h3 style="position:relative;z-index:10;margin-top:auto;margin-bottom:24px" class="font-headline text-2xl font-bold ${nt.text}">${ns.desc}</h3>
       <div style="position:relative;z-index:10;display:flex;gap:12px;padding-bottom:1.5rem">
         ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
         ${slotBox(north.afternoon, true, nt.label).replace('{SLOT}', 'Afternoon')}
@@ -216,7 +216,7 @@ function renderTodayCard(day) {
           <span class="font-headline font-bold text-sm">${ss.label}</span>
         </div>
       </div>
-      <h3 style="margin-top:auto;margin-bottom:16px" class="font-headline text-2xl font-bold ${st.text}">${ss.desc}</h3>
+      <h3 style="margin-top:auto;margin-bottom:24px" class="font-headline text-2xl font-bold ${st.text}">${ss.desc}</h3>
       <div style="display:flex;gap:12px;padding-bottom:1.5rem">
         ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
         ${slotBox(south.afternoon, false, st.label).replace('{SLOT}', 'Afternoon')}
