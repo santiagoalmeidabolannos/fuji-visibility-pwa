@@ -184,7 +184,7 @@ function renderTodayCard(day) {
   };
 
   // Fuji image — bottom-right background decoration, blends with card via mix-blend-mode
-  const fujiSilhouette = `<img src="/fuji.png" style="position:absolute;right:-20px;bottom:0;width:260px;height:175px;object-fit:cover;object-position:center bottom;opacity:0.18;mix-blend-mode:multiply;pointer-events:none;border-radius:0 0 1.5rem 0" alt="" />`;
+  const fujiSilhouette = `<div style="position:absolute;right:-40px;bottom:-40px;width:220px;height:220px;border-radius:50%;overflow:hidden;opacity:0.22;mix-blend-mode:multiply;pointer-events:none"><img src="/fuji.png" style="width:100%;height:100%;object-fit:cover;object-position:center center" alt="" /></div>`;
 
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
