@@ -431,17 +431,19 @@ function renderCameraCard(cam) {
     : `https://www.youtube.com/watch?v=${cam.youtubeId}`;
   return `
     <a href="${href}" target="_blank" rel="noopener noreferrer"
-       class="group block rounded-2xl overflow-hidden bg-surface-container-low border border-transparent hover:border-outline-variant/20 transition-all">
-      <div class="relative aspect-video overflow-hidden">
-        <img src="${thumbUrl(cam.youtubeId)}"
-             alt="${cam.name ?? 'Live camera'}"
-             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-        <div class="absolute inset-0 bg-on-background/0 group-hover:bg-on-background/10 transition-all duration-200"></div>
-        <span class="absolute top-3 left-3 bg-error text-white font-label text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full">● LIVE</span>
+       class="group flex items-center justify-between gap-4 rounded-2xl bg-surface-container-low px-5 py-4 border border-transparent hover:border-outline-variant/20 transition-all">
+      <div class="flex items-center gap-4 min-w-0">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-error/10 flex items-center justify-center">
+          <span class="material-symbols-outlined text-error text-[18px]">videocam</span>
+        </div>
+        <div class="min-w-0">
+          <p class="font-headline font-bold text-sm text-on-background truncate">${cam.name ?? 'Mt. Fuji Camera'}</p>
+          ${cam.location ? `<p class="font-label text-[10px] text-outline mt-0.5">${cam.location}</p>` : ''}
+        </div>
       </div>
-      <div class="p-4">
-        <p class="font-headline font-bold text-sm text-on-background truncate">${cam.name ?? 'Mt. Fuji Camera'}</p>
-        ${cam.location ? `<p class="font-label text-[10px] text-outline mt-0.5">${cam.location}</p>` : ''}
+      <div class="flex-shrink-0 flex items-center gap-1 text-primary">
+        <span class="font-label text-[10px] font-bold tracking-widest uppercase">Watch</span>
+        <span class="material-symbols-outlined text-[16px]">open_in_new</span>
       </div>
     </a>`;
 }
