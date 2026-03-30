@@ -264,7 +264,7 @@ function renderForecastCard(day) {
 
   return `
     <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcStyles.bg};color:${fcStyles.textColor};opacity:${fcStyles.opacity ?? 1}">
-      <p class="font-label text-[10px] ${fcStyles.dateColor} font-bold tracking-widest uppercase">${weekday}</p>
+      <p class="font-label text-[10px] ${fcStyles.dateColor} font-bold tracking-widest uppercase">${weekday} ${month}</p>
       <div class="w-11 h-11 rounded-full flex items-center justify-center ${fcStyles.iconBg} ${fcStyles.iconText}">
         <span class="material-symbols-outlined text-[20px]">${icon}</span>
       </div>
