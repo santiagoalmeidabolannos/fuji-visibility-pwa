@@ -183,8 +183,8 @@ function renderTodayCard(day) {
     </div>`;
   };
 
-  // Fuji silhouette — inline SVG, bottom:-4px hides the 1px anti-alias gap at card base
-  const fujiSilhouette = `<svg style="position:absolute;right:-60px;bottom:-12px;opacity:0.18;pointer-events:none" width="420" height="280" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"><path d="M0 345 L100 300 L195 250 L290 190 L355 135 L388 97 L400 74 L412 97 L445 135 L510 190 L605 250 L700 300 L800 345 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 74 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
+  // Fuji image — bottom-right background decoration, blends with card via mix-blend-mode
+  const fujiSilhouette = `<img src="/fuji.png" style="position:absolute;right:-40px;bottom:0;width:420px;height:280px;object-fit:cover;object-position:center bottom;opacity:0.18;mix-blend-mode:multiply;pointer-events:none;border-radius:0 0 1.5rem 0" alt="" />`;
 
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
