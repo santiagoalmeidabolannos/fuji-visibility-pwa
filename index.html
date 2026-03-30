@@ -99,8 +99,13 @@
 
     <!-- 7-Day Forecast -->
     <section aria-label="7-day forecast">
-      <div class="flex justify-between items-center mb-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 class="font-headline text-2xl font-bold tracking-tight">7-Day Outlook</h2>
+        <!-- North/South segmented toggle -->
+        <div class="bg-surface-container-low p-1 rounded-full flex items-center border border-outline-variant/10">
+          <button id="toggle-north" onclick="setForecastView('north')" class="px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white shadow-sm text-primary">North Slope</button>
+          <button id="toggle-south" onclick="setForecastView('south')" class="px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all text-outline hover:text-on-surface">South Slope</button>
+        </div>
       </div>
       <div id="forecast-list" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4" aria-live="polite">
         <!-- populated by app.js -->

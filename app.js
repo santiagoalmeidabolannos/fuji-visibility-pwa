@@ -241,36 +241,59 @@ function renderTodayCard(day) {
 }
 
 // ── Forecast card render ──────────────────────
-function renderForecastCard(day) {
+// ── Forecast view state ───────────────────────
+let forecastData = [];
+let forecastView = 'north'; // 'north' | 'south'
+
+function setForecastView(view) {
+  forecastView = view;
+
+  // Update toggle button styles
+  const northBtn = document.getElementById('toggle-north');
+  const southBtn = document.getElementById('toggle-south');
+  if (northBtn && southBtn) {
+    if (view === 'north') {
+      northBtn.className = 'px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white shadow-sm text-primary';
+      southBtn.className = 'px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all text-outline hover:text-on-surface';
+    } else {
+      southBtn.className = 'px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all bg-white shadow-sm text-primary';
+      northBtn.className = 'px-4 py-1.5 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all text-outline hover:text-on-surface';
+    }
+  }
+
+  // Re-render forecast list
+  const listEl = document.getElementById('forecast-list');
+  if (listEl && forecastData.length) {
+    listEl.innerHTML = forecastData.map(d => renderForecastCard(d, view)).join('');
+  }
+}
+
+function renderForecastCard(day, view = forecastView) {
   const { weekday, month } = formatDateShort(day.date);
-  const top = bestScore(day);
-  const c = scoreColor(top);
+  const dir = day[view] ?? {};
+  const top = Math.max(dir.morning?.score ?? 0, dir.afternoon?.score ?? 0);
   const icon = scoreIcon(top);
   const label = scoreLabel(top);
 
-  // Forecast cards — from Stitch design:
-  // High (8-10): #eff4ff light blue,  primary icon
-  // Med  (5-7):  #d0c4bf warm beige,  tertiary icon
-  // Low  (3-4):  #c0c5e0 slate blue,  secondary icon
-  // None (0-2):  #c0c5e0 slate blue opacity 70%, secondary icon
+  // Stitch design card styles
   const fcLabel = top >= 8 ? 'High' : top >= 5 ? 'Med' : top >= 3 ? 'Low' : 'None';
   const fcStyles = top >= 8
-    ? { bg: '#eff4ff', textColor: '#0b1c30', dateColor: 'text-outline',   iconBg: 'bg-primary',    iconText: 'text-white',     lblColor: 'text-primary'   }
+    ? { bg: 'bg-surface-container-low', iconBg: 'bg-primary',           iconText: 'text-white',          lblColor: 'text-primary'   }
     : top >= 5
-    ? { bg: '#eff4ff', textColor: '#0b1c30', dateColor: 'text-outline',   iconBg: 'bg-[#d0c4bf]', iconText: 'text-[#201a17]', lblColor: 'text-[#625a56]' }
+    ? { bg: 'bg-surface-container-low', iconBg: 'bg-tertiary-fixed-dim', iconText: 'text-on-tertiary-fixed', lblColor: 'text-tertiary'  }
     : top >= 3
-    ? { bg: '#c0c5e0', textColor: '#0b1c30', dateColor: 'text-[#414753]', iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',  lblColor: 'text-secondary' }
-    : { bg: '#c0c5e0', textColor: '#727785', dateColor: 'text-outline',   iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',  lblColor: 'text-outline',  opacity: '0.7' };
+    ? { bg: 'bg-surface-container-low', iconBg: 'bg-secondary-container', iconText: 'text-secondary',      lblColor: 'text-outline'   }
+    : { bg: 'bg-surface-container-low', iconBg: 'bg-secondary-container', iconText: 'text-secondary',      lblColor: 'text-outline', opacity: '0.7' };
 
   return `
-    <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcStyles.bg};color:${fcStyles.textColor};opacity:${fcStyles.opacity ?? 1}">
-      <p class="font-label text-[10px] ${fcStyles.dateColor} font-bold tracking-widest uppercase">${weekday} ${month.split(' ')[1]}</p>
-      <div class="w-11 h-11 rounded-full flex items-center justify-center ${fcStyles.iconBg} ${fcStyles.iconText}">
+    <article class="${fcStyles.bg} rounded-2xl p-5 flex flex-col items-center text-center space-y-4 border border-transparent hover:border-outline-variant/20 transition-all" style="opacity:${fcStyles.opacity ?? 1}">
+      <p class="font-label text-[10px] text-outline font-bold tracking-widest uppercase">${weekday} ${month.split(' ')[1]}</p>
+      <div class="w-12 h-12 rounded-full flex items-center justify-center ${fcStyles.iconBg} ${fcStyles.iconText}">
         <span class="material-symbols-outlined text-[20px]">${icon}</span>
       </div>
       <div>
-        <p class="font-headline font-extrabold text-xl" style="color:inherit">${fcLabel}</p>
-        <p class="font-label text-[10px] ${fcStyles.lblColor} uppercase font-bold">${label}</p>
+        <p class="font-headline font-extrabold text-xl text-on-background">${fcLabel}</p>
+        <p class="font-label text-[10px] ${fcStyles.lblColor} uppercase font-bold tracking-wider">${label}</p>
       </div>
     </article>`;
 }
@@ -285,10 +308,11 @@ function renderData(data) {
 
   // Remaining days go to the 7-day list (skip today)
   const remaining = forecast.filter(d => d !== todayEntry);
+  forecastData = remaining; // store globally for toggle re-renders
   const listEl = document.getElementById('forecast-list');
   if (listEl) {
     listEl.innerHTML = remaining.length
-      ? remaining.map(renderForecastCard).join('')
+      ? remaining.map(d => renderForecastCard(d, forecastView)).join('')
       : '<p class="last-updated" style="padding:12px 2px">No forecast data available.</p>';
   }
 
