@@ -166,10 +166,10 @@ function renderTodayCard(day) {
   // Direction summary
   const dirSummary = (dir) => {
     const s = Math.max(dir.morning?.score ?? 0, dir.afternoon?.score ?? 0);
-    if (s >= 8) return { icon: 'light_mode',        label: 'Clear',    desc: 'Excellent Clarity' };
-    if (s >= 5) return { icon: 'partly_cloudy_day', label: 'Hazy',     desc: 'Partial View'      };
-    if (s >= 3) return { icon: 'cloud',             label: 'Cloudy',   desc: 'Limited View'      };
-    return             { icon: 'foggy',             label: 'Obscured', desc: 'Not Visible'       };
+    if (s >= 8) return { icon: 'light_mode',        label: 'Clear',   desc: 'Excellent Clarity' };
+    if (s >= 5) return { icon: 'partly_cloudy_day', label: 'Partial', desc: 'Partial View'      };
+    if (s >= 3) return { icon: 'cloud',             label: 'Hazy',    desc: 'Limited View'      };
+    return             { icon: 'foggy',             label: 'Hidden',  desc: 'Not Visible'       };
   };
 
   const slotBox = (slot, isNorth, labelCls) => {
