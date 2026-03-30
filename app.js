@@ -189,7 +189,7 @@ function renderTodayCard(day) {
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
   const northCard = `
-    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:220px;background:${nt.bg}">
+    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:280px;background:${nt.bg}">
       ${fujiSilhouette}
       <div style="position:relative;z-index:10;display:flex;justify-content:space-between;align-items:flex-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${nt.badge}">North · Kawaguchiko</span>
@@ -199,19 +199,17 @@ function renderTodayCard(day) {
         </div>
       </div>
       <div style="flex:1"></div>
-      <div style="position:relative;z-index:10;display:flex;flex-direction:column;gap:48px">
-        <h3 style="margin:0" class="font-headline text-2xl font-bold ${nt.text}">${ns.desc}</h3>
-        <div style="display:flex;gap:12px;padding-bottom:1.5rem">
-          ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
-          ${slotBox(north.afternoon, true, nt.label).replace('{SLOT}', 'Afternoon')}
-        </div>
+      <h3 style="position:relative;z-index:10;margin:0" class="font-headline text-2xl font-bold ${nt.text}">${ns.desc}</h3>
+      <div style="position:relative;z-index:10;display:flex;gap:12px;padding-top:32px;padding-bottom:1.5rem">
+        ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
+        ${slotBox(north.afternoon, true, nt.label).replace('{SLOT}', 'Afternoon')}
       </div>
     </div>`;
 
   const ss = dirSummary(south);
   const st = cardTheme(Math.max(south.morning?.score ?? 0, south.afternoon?.score ?? 0), false);
   const southCard = `
-    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:220px;background:${st.bg}">
+    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:280px;background:${st.bg}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${st.badge}">South · Hakone</span>
         <div class="flex items-center gap-1 ${st.icon}">
@@ -220,12 +218,10 @@ function renderTodayCard(day) {
         </div>
       </div>
       <div style="flex:1"></div>
-      <div style="display:flex;flex-direction:column;gap:48px">
-        <h3 style="margin:0" class="font-headline text-2xl font-bold ${st.text}">${ss.desc}</h3>
-        <div style="display:flex;gap:12px;padding-bottom:1.5rem">
-          ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
-          ${slotBox(south.afternoon, false, st.label).replace('{SLOT}', 'Afternoon')}
-        </div>
+      <h3 style="margin:0" class="font-headline text-2xl font-bold ${st.text}">${ss.desc}</h3>
+      <div style="display:flex;gap:12px;padding-top:32px;padding-bottom:1.5rem">
+        ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
+        ${slotBox(south.afternoon, false, st.label).replace('{SLOT}', 'Afternoon')}
       </div>
     </div>`;
 
