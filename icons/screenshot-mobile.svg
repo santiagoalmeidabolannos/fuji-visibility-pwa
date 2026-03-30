@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844">
+  <rect width="390" height="844" fill="#f7f4ef"/>
+  <!-- Header bar -->
+  <rect width="390" height="60" fill="#f7f4ef"/>
+  <text x="20" y="40" font-family="system-ui, sans-serif" font-size="14" fill="#5c6070">富士山</text>
+  <text x="70" y="40" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#1a1a2e">Fuji Visibility</text>
+  <!-- Fuji hero area -->
+  <rect y="60" width="390" height="200" fill="#0d1b2e"/>
+  <path d="M 0 260 L 70 210 L 140 160 L 195 110 L 250 160 L 320 210 L 390 260 Z" fill="#1c2340"/>
+  <path d="M 183 128 L 191 108 L 195 96 L 199 108 L 207 128 L 203 136 L 197 140 L 195 141 L 193 140 L 187 136 Z" fill="white"/>
+  <!-- Today card placeholder -->
+  <rect x="16" y="244" width="358" height="120" rx="12" fill="white" stroke="#e2ddd4" stroke-width="1"/>
+  <rect x="32" y="264" width="120" height="14" rx="4" fill="#e2ddd4"/>
+  <rect x="270" y="262" width="48" height="18" rx="9" fill="#e8edf8"/>
+  <rect x="32" y="296" width="156" height="56" rx="8" fill="#f0ece5"/>
+  <rect x="202" y="296" width="156" height="56" rx="8" fill="#f0ece5"/>
+  <!-- Forecast label -->
+  <text x="18" y="396" font-family="system-ui, sans-serif" font-size="10" font-weight="700" letter-spacing="2" fill="#8a8fa0">7-DAY FORECAST</text>
+  <!-- Forecast cards -->
+  <rect x="0" y="408" width="390" height="72" rx="12" fill="white" stroke="#e2ddd4" stroke-width="1"/>
+  <rect x="0" y="488" width="390" height="72" rx="12" fill="white" stroke="#e2ddd4" stroke-width="1"/>
+  <rect x="0" y="568" width="390" height="72" rx="12" fill="white" stroke="#e2ddd4" stroke-width="1"/>
+</svg>

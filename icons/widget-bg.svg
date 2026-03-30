@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <defs>
+    <linearGradient id="sky-w" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1b2e"/>
+      <stop offset="100%" stop-color="#1e4976"/>
+    </linearGradient>
+    <linearGradient id="mtn-w" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c2340"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="snow-w" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dde8f0"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="200" rx="16" fill="url(#sky-w)"/>
+  <path d="M 0 200 L 80 150 L 160 100 L 200 50 L 240 100 L 320 150 L 400 200 Z" fill="url(#mtn-w)"/>
+  <path d="M 188 72 L 196 52 L 200 40 L 204 52 L 212 72 L 208 80 L 202 84 L 200 85 L 198 84 L 192 80 Z" fill="url(#snow-w)"/>
+  <circle cx="60"  cy="30" r="2" fill="white" opacity="0.6"/>
+  <circle cx="120" cy="20" r="1.5" fill="white" opacity="0.5"/>
+  <circle cx="300" cy="25" r="2" fill="white" opacity="0.6"/>
+  <circle cx="350" cy="15" r="1.5" fill="white" opacity="0.5"/>
+</svg>

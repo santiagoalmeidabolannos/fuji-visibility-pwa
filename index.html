@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Real-time Mt. Fuji visibility forecast — see if Fuji is visible today">
+  <meta name="theme-color" content="#005ab6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FujiSight">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-apple.svg">
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "outline": "#727785",
+            "surface-variant": "#d3e4fe",
+            "tertiary": "#625a56",
+            "tertiary-fixed": "#ece0db",
+            "tertiary-fixed-dim": "#d0c4bf",
+            "on-tertiary-fixed": "#201a17",
+            "surface-container": "#e5eeff",
+            "primary-container": "#1672df",
+            "secondary": "#585d75",
+            "surface-container-highest": "#d3e4fe",
+            "secondary-container": "#dce1fd",
+            "secondary-fixed-dim": "#c0c5e0",
+            "on-secondary": "#ffffff",
+            "surface-bright": "#f8f9ff",
+            "on-surface-variant": "#414753",
+            "background": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed": "#d7e3ff",
+            "on-background": "#0b1c30",
+            "on-tertiary-container": "#fffbff",
+            "surface-dim": "#cbdbf5",
+            "on-primary": "#ffffff",
+            "surface": "#f8f9ff",
+            "outline-variant": "#c1c6d5",
+            "surface-container-low": "#eff4ff",
+            "on-surface": "#0b1c30",
+            "surface-container-high": "#dce9ff",
+            "inverse-surface": "#213145",
+            "primary": "#005ab6",
+            "error": "#ba1a1a"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+  <title>FujiSight</title>
+</head>
+<body class="bg-surface font-body text-on-background antialiased">
+
+  <!-- TopAppBar -->
+  <header class="fixed top-0 w-full z-50 bg-[#f8f9ff]/80 backdrop-blur-xl flex justify-between items-center px-6 py-4">
+    <div class="text-xl font-extrabold tracking-tighter text-[#0b1c30] font-headline">FujiSight</div>
+    <div id="network-badge" class="hidden px-3 py-1 rounded-full bg-error/10 text-error font-label text-[10px] font-bold tracking-widest uppercase">Offline</div>
+  </header>
+
+  <main class="pt-24 pb-32 px-6 max-w-5xl mx-auto space-y-12">
+
+    <!-- Hero Section: Today's Visibility -->
+    <section aria-label="Today's visibility">
+
+      <!-- Fuji SVG -->
+      <div class="w-full mb-6 rounded-3xl overflow-hidden">
+        <svg id="fuji-svg" viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mt. Fuji silhouette — visibility indicator" class="w-full">
+          <defs>
+            <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop id="sky-stop-top" offset="0%" stop-color="#0d1b2e"/>
+              <stop id="sky-stop-bottom" offset="100%" stop-color="#1e4976"/>
+            </linearGradient>
+            <linearGradient id="mountain-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1c2340"/>
+              <stop offset="100%" stop-color="#111827"/>
+            </linearGradient>
+            <linearGradient id="snow-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="100%" stop-color="#dde8f0"/>
+            </linearGradient>
+            <linearGradient id="haze-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f8f9ff" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#f8f9ff" stop-opacity="1"/>
+            </linearGradient>
+            <filter id="blur-haze"><feGaussianBlur stdDeviation="8"/></filter>
+          </defs>
+          <rect width="800" height="240" fill="url(#sky-grad)"/>
+          <g id="stars">
+            <circle cx="80"  cy="30"  r="1.5" fill="white" opacity="0.7"/>
+            <circle cx="160" cy="14"  r="1"   fill="white" opacity="0.5"/>
+            <circle cx="260" cy="22"  r="1.2" fill="white" opacity="0.6"/>
+            <circle cx="540" cy="18"  r="1.2" fill="white" opacity="0.6"/>
+            <circle cx="640" cy="10"  r="1"   fill="white" opacity="0.5"/>
+            <circle cx="720" cy="28"  r="1.5" fill="white" opacity="0.7"/>
+          </g>
+          <rect id="atmos-haze" x="0" y="60" width="800" height="180" fill="#f8f9ff" opacity="0" filter="url(#blur-haze)"/>
+          <path d="M0 240 L100 200 L195 160 L290 115 L355 76 L388 48 L400 28 L412 48 L445 76 L510 115 L605 160 L700 200 L800 240 Z" fill="url(#mountain-grad)"/>
+          <path d="M376 80 L389 46 L400 28 L411 46 L424 80 L418 92 L408 100 L400 102 L392 100 L382 92 Z" fill="url(#snow-grad)"/>
+          <rect id="haze-overlay" x="0" y="130" width="800" height="110" fill="url(#haze-grad)" opacity="0"/>
+        </svg>
+      </div>
+
+      <!-- Today card (populated by app.js) -->
+      <div id="today-card" aria-live="polite">
+        <div class="animate-pulse space-y-4">
+          <div class="h-6 bg-surface-container rounded-full w-40"></div>
+          <div class="h-16 bg-surface-container rounded-3xl"></div>
+          <div class="grid grid-cols-2 gap-6">
+            <div class="h-40 bg-surface-container rounded-3xl"></div>
+            <div class="h-40 bg-surface-container rounded-3xl"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 7-Day Forecast -->
+    <section aria-label="7-day forecast">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="font-headline text-2xl font-bold tracking-tight">7-Day Outlook</h2>
+      </div>
+      <div id="forecast-list" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4" aria-live="polite">
+        <!-- populated by app.js -->
+        <div class="animate-pulse bg-surface-container-low rounded-2xl h-36"></div>
+        <div class="animate-pulse bg-surface-container-low rounded-2xl h-36"></div>
+        <div class="animate-pulse bg-surface-container-low rounded-2xl h-36"></div>
+        <div class="animate-pulse bg-surface-container-low rounded-2xl h-36"></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+      <p id="last-updated" class="font-label text-[10px] uppercase tracking-widest text-outline" aria-live="polite">—</p>
+    </footer>
+
+  </main>
+
+  <!-- BottomNavBar -->
+  <nav class="fixed bottom-6 left-0 right-0 flex justify-around items-center z-50">
+    <div class="bg-white/40 backdrop-blur-2xl shadow-[0_8px_32px_rgba(11,28,48,0.06)] rounded-full px-4 py-2 flex justify-around items-center w-[90%] max-w-md">
+      <button class="flex flex-col items-center justify-center bg-[#005ab6] text-white rounded-full h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150" aria-label="Home">
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">landscape</span>
+      </button>
+      <button class="flex flex-col items-center justify-center text-[#727785] h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150" aria-label="Forecast">
+        <span class="material-symbols-outlined">calendar_month</span>
+      </button>
+      <button class="flex flex-col items-center justify-center text-[#727785] h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150" aria-label="Info">
+        <span class="material-symbols-outlined">info</span>
+      </button>
+    </div>
+  </nav>
+
+  <script src="/app.js"></script>
+</body>
+</html>

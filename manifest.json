@@ -1,0 +1,82 @@
+{
+  "name": "Is Fuji Visible?",
+  "short_name": "Fuji",
+  "description": "Real-time Mt. Fuji visibility forecast — see if Fuji is visible today",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f4ef",
+  "theme_color": "#1e4976",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icons/screenshot-mobile.svg",
+      "sizes": "390x844",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "Fuji Visibility forecast on mobile"
+    }
+  ],
+  "widgets": [
+    {
+      "name": "Fuji Today",
+      "tag": "fuji-today",
+      "description": "Today's Mt. Fuji visibility scores — north & south morning",
+      "ms_ac_template": "/widget-template.json",
+      "data": "/widget-data.json",
+      "type": "application/json",
+      "auth": false,
+      "update": "3600",
+      "icons": [
+        {
+          "src": "/icons/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ],
+      "backgrounds": [
+        {
+          "src": "/icons/widget-bg.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's Forecast",
+      "short_name": "Today",
+      "description": "Jump to today's visibility score",
+      "url": "/?shortcut=today",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "any" }]
+    }
+  ],
+  "categories": ["weather", "travel", "utilities"]
+}
