@@ -78,48 +78,10 @@
     <div id="network-badge" class="hidden px-3 py-1 rounded-full bg-error/10 text-error font-label text-[10px] font-bold tracking-widest uppercase">Offline</div>
   </header>
 
-  <main class="pt-24 pb-32 px-6 max-w-5xl mx-auto space-y-12">
+  <main class="pt-24 pb-12 px-6 max-w-5xl mx-auto space-y-12">
 
     <!-- Hero Section: Today's Visibility -->
     <section aria-label="Today's visibility">
-
-      <!-- Fuji SVG -->
-      <div class="w-full mb-6 rounded-3xl overflow-hidden">
-        <svg id="fuji-svg" viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mt. Fuji silhouette — visibility indicator" class="w-full">
-          <defs>
-            <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
-              <stop id="sky-stop-top" offset="0%" stop-color="#0d1b2e"/>
-              <stop id="sky-stop-bottom" offset="100%" stop-color="#1e4976"/>
-            </linearGradient>
-            <linearGradient id="mountain-grad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#1c2340"/>
-              <stop offset="100%" stop-color="#111827"/>
-            </linearGradient>
-            <linearGradient id="snow-grad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ffffff"/>
-              <stop offset="100%" stop-color="#dde8f0"/>
-            </linearGradient>
-            <linearGradient id="haze-grad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#f8f9ff" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#f8f9ff" stop-opacity="1"/>
-            </linearGradient>
-            <filter id="blur-haze"><feGaussianBlur stdDeviation="8"/></filter>
-          </defs>
-          <rect width="800" height="240" fill="url(#sky-grad)"/>
-          <g id="stars">
-            <circle cx="80"  cy="30"  r="1.5" fill="white" opacity="0.7"/>
-            <circle cx="160" cy="14"  r="1"   fill="white" opacity="0.5"/>
-            <circle cx="260" cy="22"  r="1.2" fill="white" opacity="0.6"/>
-            <circle cx="540" cy="18"  r="1.2" fill="white" opacity="0.6"/>
-            <circle cx="640" cy="10"  r="1"   fill="white" opacity="0.5"/>
-            <circle cx="720" cy="28"  r="1.5" fill="white" opacity="0.7"/>
-          </g>
-          <rect id="atmos-haze" x="0" y="60" width="800" height="180" fill="#f8f9ff" opacity="0" filter="url(#blur-haze)"/>
-          <path d="M0 240 L100 200 L195 160 L290 115 L355 76 L388 48 L400 28 L412 48 L445 76 L510 115 L605 160 L700 200 L800 240 Z" fill="url(#mountain-grad)"/>
-          <path d="M376 80 L389 46 L400 28 L411 46 L424 80 L418 92 L408 100 L400 102 L392 100 L382 92 Z" fill="url(#snow-grad)"/>
-          <rect id="haze-overlay" x="0" y="130" width="800" height="110" fill="url(#haze-grad)" opacity="0"/>
-        </svg>
-      </div>
 
       <!-- Today card (populated by app.js) -->
       <div id="today-card" aria-live="polite">
@@ -156,20 +118,6 @@
 
   </main>
 
-  <!-- BottomNavBar -->
-  <nav class="fixed bottom-6 left-0 right-0 flex justify-around items-center z-50">
-    <div class="bg-white/40 backdrop-blur-2xl shadow-[0_8px_32px_rgba(11,28,48,0.06)] rounded-full px-4 py-2 flex justify-around items-center w-[90%] max-w-md">
-      <button class="flex flex-col items-center justify-center bg-[#005ab6] text-white rounded-full h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150" aria-label="Home">
-        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">landscape</span>
-      </button>
-      <button class="flex flex-col items-center justify-center text-[#727785] h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150" aria-label="Forecast">
-        <span class="material-symbols-outlined">calendar_month</span>
-      </button>
-      <button class="flex flex-col items-center justify-center text-[#727785] h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150" aria-label="Info">
-        <span class="material-symbols-outlined">info</span>
-      </button>
-    </div>
-  </nav>
 
   <script src="/app.js"></script>
 </body>

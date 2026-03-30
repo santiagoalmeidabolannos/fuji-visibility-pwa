@@ -132,17 +132,17 @@ function renderTodayCard(day) {
   const headline = topScore >= 8 ? 'VISIBLE' : topScore >= 5 ? 'PARTIAL' : topScore >= 3 ? 'HAZY' : 'NOT VISIBLE';
 
   const dirCard = (label, dir) => `
-    <div class="relative overflow-hidden rounded-3xl bg-surface-container-low p-6 flex flex-col justify-between min-h-[180px]">
+    <div class="rounded-3xl bg-surface-container-low p-6 flex flex-col gap-4">
       <span class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label text-[10px] font-bold tracking-widest uppercase self-start">${label}</span>
-      <div class="flex gap-3 mt-4">
-        <div class="bg-white/80 backdrop-blur-md rounded-2xl p-3 flex-1">
+      <div class="flex gap-3">
+        <div class="bg-white rounded-2xl p-3 flex-1">
           <p class="font-label text-[10px] text-outline uppercase tracking-tighter mb-1">Morning</p>
           <p class="font-headline font-extrabold text-lg text-primary">${dir.morning?.score != null ? dir.morning.score + '/10' : '—'}</p>
           <p class="font-label text-[9px] text-outline mt-0.5">${dir.morning?.status ?? ''}</p>
         </div>
-        <div class="bg-white/50 backdrop-blur-md rounded-2xl p-3 flex-1">
+        <div class="bg-white rounded-2xl p-3 flex-1">
           <p class="font-label text-[10px] text-outline uppercase tracking-tighter mb-1">Afternoon</p>
-          <p class="font-headline font-extrabold text-lg text-on-surface">${dir.afternoon?.score != null ? dir.afternoon.score + '/10' : '—'}</p>
+          <p class="font-headline font-extrabold text-lg text-primary">${dir.afternoon?.score != null ? dir.afternoon.score + '/10' : '—'}</p>
           <p class="font-label text-[9px] text-outline mt-0.5">${dir.afternoon?.status ?? ''}</p>
         </div>
       </div>
