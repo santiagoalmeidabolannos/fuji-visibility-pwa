@@ -183,8 +183,9 @@ function renderTodayCard(day) {
     </div>`;
   };
 
-  // Fuji silhouette — inline styles only (Tailwind CDN doesn't JIT dynamic classes)
-  const fujiSilhouette = `<svg style="position:absolute;right:-32px;bottom:0;opacity:0.18;pointer-events:none" width="320" height="240" viewBox="0 0 800 340"  xmlns="http://www.w3.org/2000/svg"><path d="M0 360 L100 305 L195 255 L290 195 L355 140 L388 102 L400 78 L412 102 L445 140 L510 195 L605 255 L700 305 L800 360 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
+  // Fuji silhouette as inline SVG data URI background — guaranteed flush, no clipping math
+  const fujiSvgData = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="800" height="300"><path d="M0 300 L100 260 L195 215 L290 158 L355 105 L388 68 L400 46 L412 68 L445 105 L510 158 L605 215 L700 260 L800 300 Z" fill="%230b1c30"/><path d="M376 100 L389 66 L400 46 L411 66 L424 100 L418 112 L408 120 L400 122 L392 120 L382 112 Z" fill="white" opacity="0.5"/></svg>`;
+  const fujiSilhouette = `<div style="position:absolute;bottom:0;right:0;width:70%;height:75%;opacity:0.15;pointer-events:none;background:url('data:image/svg+xml,${fujiSvgData}') no-repeat bottom right;background-size:contain"></div>`;
 
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);

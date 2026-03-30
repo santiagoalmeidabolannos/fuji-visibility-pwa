@@ -6,8 +6,8 @@
      • widget-data.json                       → served from in-memory store
 ───────────────────────────────────────────── */
 
-const SHELL_CACHE  = 'fuji-shell-v16';
-const API_CACHE    = 'fuji-api-v16';
+const SHELL_CACHE  = 'fuji-shell-v17';
+const API_CACHE    = 'fuji-api-v17';
 const API_URL      = 'https://fuji-visibility-api.onrender.com/visibility';
 
 const SHELL_ASSETS = [
