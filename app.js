@@ -135,19 +135,20 @@ function renderTodayCard(day) {
   const slotOpacity = (score) => score != null ? (1 - (score / 10) * 0.6).toFixed(2) : '1.00';
 
   // Card color palette based on score
+  // slot.white = true means slot boxes use white-on-dark styling
   const cardTheme = (score, isNorth) => {
     if (score >= 8) return isNorth
-      ? { bg: '#eff4ff', badge: 'bg-primary/10 text-primary', icon: 'text-primary', text: 'text-on-background', slot: { text: 'text-primary', label: 'text-outline' } }
-      : { bg: '#ece0db', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]', slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60' } };
+      ? { bg: '#eff4ff', badge: 'bg-primary/10 text-primary',       icon: 'text-primary',   text: 'text-on-background', slot: { text: 'text-primary',   label: 'text-outline',      white: false } }
+      : { bg: '#ece0db', badge: 'bg-[#4d4542]/10 text-[#4d4542]',  icon: 'text-[#4d4542]', text: 'text-[#201a17]',     slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60', white: false } };
     if (score >= 5) return isNorth
-      ? { bg: '#dce1fd', badge: 'bg-secondary/10 text-secondary', icon: 'text-secondary', text: 'text-on-background', slot: { text: 'text-secondary', label: 'text-outline' } }
-      : { bg: '#d0c4bf', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]', slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60' } };
+      ? { bg: '#dce1fd', badge: 'bg-secondary/10 text-secondary',   icon: 'text-secondary', text: 'text-on-background', slot: { text: 'text-secondary', label: 'text-outline',      white: false } }
+      : { bg: '#d0c4bf', badge: 'bg-[#4d4542]/10 text-[#4d4542]',  icon: 'text-[#4d4542]', text: 'text-[#201a17]',     slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60', white: false } };
     if (score >= 3) return isNorth
-      ? { bg: '#e5eeff', badge: 'bg-primary/10 text-primary', icon: 'text-primary', text: 'text-on-background', slot: { text: 'text-primary', label: 'text-outline' } }
-      : { bg: '#c0c5e0', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]', slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60' } };
+      ? { bg: '#8fa8d4', badge: 'bg-white/20 text-white',           icon: 'text-white',     text: 'text-white',         slot: { text: 'text-white',     label: 'text-white/70',     white: true  } }
+      : { bg: '#9e9ab0', badge: 'bg-white/20 text-white',           icon: 'text-white',     text: 'text-white',         slot: { text: 'text-white',     label: 'text-white/70',     white: true  } };
     return isNorth
-      ? { bg: '#cbdbf5', badge: 'bg-primary/10 text-primary', icon: 'text-primary', text: 'text-on-background', slot: { text: 'text-primary', label: 'text-outline' } }
-      : { bg: '#a8a4b8', badge: 'bg-white/20 text-white', icon: 'text-white', text: 'text-white', slot: { text: 'text-white', label: 'text-white/60' } };
+      ? { bg: '#5c7aaa', badge: 'bg-white/20 text-white',           icon: 'text-white',     text: 'text-white',         slot: { text: 'text-white',     label: 'text-white/70',     white: true  } }
+      : { bg: '#6b6680', badge: 'bg-white/20 text-white',           icon: 'text-white',     text: 'text-white',         slot: { text: 'text-white',     label: 'text-white/70',     white: true  } };
   };
 
   // Direction summary
@@ -162,7 +163,11 @@ function renderTodayCard(day) {
   const slotBox = (slot, s) => {
     const score = slot?.score ?? null;
     const pct = score != null ? (score * 10) + '%' : '—';
-    return `<div class="rounded-2xl p-3 flex-1" style="background:rgba(255,255,255,${slotOpacity(score)})">
+    // Dark cards: white/30 bg with opacity tied to score. Light cards: white with opacity.
+    const bg = s.white
+      ? `rgba(255,255,255,${slotOpacity(score)})`
+      : `rgba(255,255,255,${slotOpacity(score)})`;
+    return `<div class="rounded-2xl p-3 flex-1" style="background:${bg}">
       <p class="font-label text-[10px] ${s.label} uppercase tracking-tighter mb-1">{SLOT}</p>
       <p class="font-headline font-extrabold text-xl ${s.text}">${pct}</p>
     </div>`;
@@ -233,19 +238,24 @@ function renderForecastCard(day) {
   const icon = scoreIcon(top);
   const label = scoreLabel(top);
 
-  // Forecast card bg color based on score
-  const fcBg = top >= 8 ? '#eff4ff' : top >= 5 ? '#dce1fd' : top >= 3 ? '#e5eeff' : '#cbdbf5';
-  const fcIconBg = top >= 8 ? 'bg-primary text-white' : top >= 5 ? 'bg-[#dce1fd] text-secondary' : top >= 3 ? 'bg-[#e5eeff] text-primary' : 'bg-[#cbdbf5] text-outline';
+  // Forecast card styles based on score
+  const fcStyles = top >= 8
+    ? { bg: '#eff4ff', dateColor: 'text-outline',     iconBg: 'bg-primary',        iconText: 'text-white',   pctColor: 'text-primary',   lblColor: 'text-primary'   }
+    : top >= 5
+    ? { bg: '#dce1fd', dateColor: 'text-outline',     iconBg: 'bg-secondary',      iconText: 'text-white',   pctColor: 'text-secondary', lblColor: 'text-secondary' }
+    : top >= 3
+    ? { bg: '#8fa8d4', dateColor: 'text-white/70',    iconBg: 'bg-white/30',       iconText: 'text-white',   pctColor: 'text-white',     lblColor: 'text-white/80'  }
+    : { bg: '#5c7aaa', dateColor: 'text-white/60',    iconBg: 'bg-white/20',       iconText: 'text-white',   pctColor: 'text-white',     lblColor: 'text-white/70'  };
 
   return `
-    <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcBg}">
-      <p class="font-label text-[10px] text-outline font-bold tracking-widest uppercase">${weekday} ${month}</p>
-      <div class="w-11 h-11 rounded-full flex items-center justify-center ${fcIconBg}">
+    <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcStyles.bg}">
+      <p class="font-label text-[10px] ${fcStyles.dateColor} font-bold tracking-widest uppercase">${weekday} ${month}</p>
+      <div class="w-11 h-11 rounded-full flex items-center justify-center ${fcStyles.iconBg} ${fcStyles.iconText}">
         <span class="material-symbols-outlined text-[20px]">${icon}</span>
       </div>
       <div>
-        <p class="font-headline font-extrabold text-base">${top > 0 ? (top * 10) + '%' : '—'}</p>
-        <p class="font-label text-[10px] ${c.label} uppercase font-bold">${label}</p>
+        <p class="font-headline font-extrabold text-base ${fcStyles.pctColor}">${top > 0 ? (top * 10) + '%' : '—'}</p>
+        <p class="font-label text-[10px] ${fcStyles.lblColor} uppercase font-bold">${label}</p>
       </div>
     </article>`;
 }
