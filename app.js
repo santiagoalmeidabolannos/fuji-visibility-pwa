@@ -131,13 +131,26 @@ function renderTodayCard(day) {
 
   const headline = topScore >= 8 ? 'VISIBLE' : topScore >= 5 ? 'PARTIAL' : topScore >= 3 ? 'HAZY' : 'NOT VISIBLE';
 
-  // Less visibility = more opaque (draws attention to bad conditions)
-  const slotOpacity = (score) => {
-    if (score == null) return 1;
-    return 1 - (score / 10) * 0.6; // score 10 → 0.4, score 0 → 1.0
+  // opacity: less visible = more opaque
+  const slotOpacity = (score) => score != null ? (1 - (score / 10) * 0.6).toFixed(2) : '1.00';
+
+  // Card color palette based on score
+  const cardTheme = (score, isNorth) => {
+    if (score >= 8) return isNorth
+      ? { bg: '#eff4ff', badge: 'bg-primary/10 text-primary', icon: 'text-primary', text: 'text-on-background', slot: { text: 'text-primary', label: 'text-outline' } }
+      : { bg: '#ece0db', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]', slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60' } };
+    if (score >= 5) return isNorth
+      ? { bg: '#dce1fd', badge: 'bg-secondary/10 text-secondary', icon: 'text-secondary', text: 'text-on-background', slot: { text: 'text-secondary', label: 'text-outline' } }
+      : { bg: '#d0c4bf', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]', slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60' } };
+    if (score >= 3) return isNorth
+      ? { bg: '#e5eeff', badge: 'bg-primary/10 text-primary', icon: 'text-primary', text: 'text-on-background', slot: { text: 'text-primary', label: 'text-outline' } }
+      : { bg: '#c0c5e0', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]', slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60' } };
+    return isNorth
+      ? { bg: '#cbdbf5', badge: 'bg-primary/10 text-primary', icon: 'text-primary', text: 'text-on-background', slot: { text: 'text-primary', label: 'text-outline' } }
+      : { bg: '#a8a4b8', badge: 'bg-white/20 text-white', icon: 'text-white', text: 'text-white', slot: { text: 'text-white', label: 'text-white/60' } };
   };
 
-  // Direction-level summary (best of morning/afternoon)
+  // Direction summary
   const dirSummary = (dir) => {
     const s = Math.max(dir.morning?.score ?? 0, dir.afternoon?.score ?? 0);
     if (s >= 8) return { icon: 'light_mode',        label: 'Clear',    desc: 'Excellent Clarity' };
@@ -146,48 +159,52 @@ function renderTodayCard(day) {
     return             { icon: 'foggy',             label: 'Obscured', desc: 'Not Visible'       };
   };
 
-  const slotBox = (slot, textColor, labelColor) => {
+  const slotBox = (slot, s) => {
     const score = slot?.score ?? null;
     const pct = score != null ? (score * 10) + '%' : '—';
-    const opacity = slotOpacity(score);
-    return `<div class="rounded-2xl p-3 flex-1" style="background:rgba(255,255,255,${opacity.toFixed(2)})">
-      <p class="font-label text-[10px] ${labelColor} uppercase tracking-tighter mb-1">{SLOT}</p>
-      <p class="font-headline font-extrabold text-xl ${textColor}">${pct}</p>
-      <p class="font-label text-[9px] ${labelColor} mt-0.5">${slot?.status ?? ''}</p>
+    return `<div class="rounded-2xl p-3 flex-1" style="background:rgba(255,255,255,${slotOpacity(score)})">
+      <p class="font-label text-[10px] ${s.label} uppercase tracking-tighter mb-1">{SLOT}</p>
+      <p class="font-headline font-extrabold text-xl ${s.text}">${pct}</p>
     </div>`;
   };
 
+  // Fuji silhouette SVG for north card background
+  const fujiSilhouette = `<svg class="absolute -right-4 -bottom-2 opacity-[0.12] pointer-events-none" width="180" height="100" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"><path d="M0 340 L100 295 L195 245 L290 185 L355 130 L388 92 L400 68 L412 92 L445 130 L510 185 L605 245 L700 295 L800 340 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
+
   const ns = dirSummary(north);
+  const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
   const northCard = `
-    <div class="rounded-3xl bg-surface-container-low p-6 flex flex-col gap-3">
-      <div class="flex justify-between items-start">
-        <span class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label text-[10px] font-bold tracking-widest uppercase">North · Kawaguchiko</span>
-        <div class="flex items-center gap-1 text-primary">
+    <div class="relative overflow-hidden rounded-3xl p-6 flex flex-col gap-3 min-h-[220px]" style="background:${nt.bg}">
+      ${fujiSilhouette}
+      <div class="relative z-10 flex justify-between items-start">
+        <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${nt.badge}">North · Kawaguchiko</span>
+        <div class="flex items-center gap-1 ${nt.icon}">
           <span class="material-symbols-outlined text-[18px]">${ns.icon}</span>
           <span class="font-headline font-bold text-sm">${ns.label}</span>
         </div>
       </div>
-      <h3 class="font-headline text-2xl font-bold text-on-background">${ns.desc}</h3>
-      <div class="flex gap-3">
-        ${slotBox(north.morning, 'text-primary', 'text-outline').replace('{SLOT}', 'Morning')}
-        ${slotBox(north.afternoon, 'text-primary', 'text-outline').replace('{SLOT}', 'Afternoon')}
+      <h3 class="relative z-10 font-headline text-2xl font-bold mt-auto mb-2 ${nt.text}">${ns.desc}</h3>
+      <div class="relative z-10 flex gap-3">
+        ${slotBox(north.morning, nt.slot).replace('{SLOT}', 'Morning')}
+        ${slotBox(north.afternoon, nt.slot).replace('{SLOT}', 'Afternoon')}
       </div>
     </div>`;
 
   const ss = dirSummary(south);
+  const st = cardTheme(Math.max(south.morning?.score ?? 0, south.afternoon?.score ?? 0), false);
   const southCard = `
-    <div class="rounded-3xl bg-[#ece0db] p-6 flex flex-col gap-3">
+    <div class="relative overflow-hidden rounded-3xl p-6 flex flex-col gap-3 min-h-[220px]" style="background:${st.bg}">
       <div class="flex justify-between items-start">
-        <span class="px-3 py-1 rounded-full bg-[#4d4542]/10 text-[#4d4542] font-label text-[10px] font-bold tracking-widest uppercase">South · Hakone</span>
-        <div class="flex items-center gap-1 text-[#4d4542]">
+        <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${st.badge}">South · Hakone</span>
+        <div class="flex items-center gap-1 ${st.icon}">
           <span class="material-symbols-outlined text-[18px]">${ss.icon}</span>
           <span class="font-headline font-bold text-sm">${ss.label}</span>
         </div>
       </div>
-      <h3 class="font-headline text-2xl font-bold text-[#201a17]">${ss.desc}</h3>
+      <h3 class="font-headline text-2xl font-bold mt-auto mb-2 ${st.text}">${ss.desc}</h3>
       <div class="flex gap-3">
-        ${slotBox(south.morning, 'text-[#4d4542]', 'text-[#4d4542]/60').replace('{SLOT}', 'Morning')}
-        ${slotBox(south.afternoon, 'text-[#4d4542]', 'text-[#4d4542]/60').replace('{SLOT}', 'Afternoon')}
+        ${slotBox(south.morning, st.slot).replace('{SLOT}', 'Morning')}
+        ${slotBox(south.afternoon, st.slot).replace('{SLOT}', 'Afternoon')}
       </div>
     </div>`;
 
@@ -216,14 +233,18 @@ function renderForecastCard(day) {
   const icon = scoreIcon(top);
   const label = scoreLabel(top);
 
+  // Forecast card bg color based on score
+  const fcBg = top >= 8 ? '#eff4ff' : top >= 5 ? '#dce1fd' : top >= 3 ? '#e5eeff' : '#cbdbf5';
+  const fcIconBg = top >= 8 ? 'bg-primary text-white' : top >= 5 ? 'bg-[#dce1fd] text-secondary' : top >= 3 ? 'bg-[#e5eeff] text-primary' : 'bg-[#cbdbf5] text-outline';
+
   return `
-    <article class="bg-surface-container-low rounded-2xl p-4 flex flex-col items-center text-center space-y-3">
+    <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcBg}">
       <p class="font-label text-[10px] text-outline font-bold tracking-widest uppercase">${weekday} ${month}</p>
-      <div class="w-11 h-11 rounded-full ${c.bg} flex items-center justify-center ${c.text}">
+      <div class="w-11 h-11 rounded-full flex items-center justify-center ${fcIconBg}">
         <span class="material-symbols-outlined text-[20px]">${icon}</span>
       </div>
       <div>
-        <p class="font-headline font-extrabold text-base">${top > 0 ? top + '/10' : '—'}</p>
+        <p class="font-headline font-extrabold text-base">${top > 0 ? (top * 10) + '%' : '—'}</p>
         <p class="font-label text-[10px] ${c.label} uppercase font-bold">${label}</p>
       </div>
     </article>`;
