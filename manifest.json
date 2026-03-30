@@ -1,6 +1,6 @@
 {
-  "name": "Is Fuji Visible?",
-  "short_name": "Fuji",
+  "name": "FujiSight",
+  "short_name": "FujiSight",
   "description": "Real-time Mt. Fuji visibility forecast — see if Fuji is visible today",
   "start_url": "/",
   "display": "standalone",
