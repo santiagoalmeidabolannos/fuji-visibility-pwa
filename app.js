@@ -131,24 +131,36 @@ function renderTodayCard(day) {
 
   const headline = topScore >= 8 ? 'VISIBLE' : topScore >= 5 ? 'PARTIAL' : topScore >= 3 ? 'HAZY' : 'NOT VISIBLE';
 
-  // opacity: less visible = more opaque
-  const slotOpacity = (score) => score != null ? (1 - (score / 10) * 0.6).toFixed(2) : '1.00';
+  // Higher score = more opaque slot box (matches Stitch design: 95%→0.8, 12%→0.15)
+  const slotOpacity = (score) => score != null ? Math.max(0.15, (score / 10) * 0.85).toFixed(2) : '0.15';
 
-  // Card color palette based on score
-  // slot.white = true means slot boxes use white-on-dark styling
+  // Slot text color: high=primary blue, mid=on-surface, low=muted
+  const slotTextColor = (score, isNorth) => {
+    if (isNorth) {
+      if (score >= 7) return 'text-primary';
+      if (score >= 4) return 'text-on-surface';
+      return 'text-outline';
+    } else {
+      if (score >= 7) return 'text-[#4d4542]';
+      if (score >= 4) return 'text-[#4d4542]';
+      return 'text-[#4d4542]/40';
+    }
+  };
+
+  // Card color palette — light cards only, slot boxes handle the opacity
   const cardTheme = (score, isNorth) => {
     if (score >= 8) return isNorth
-      ? { bg: '#eff4ff', badge: 'bg-primary/10 text-primary',       icon: 'text-primary',   text: 'text-on-background', slot: { text: 'text-primary',   label: 'text-outline',      white: false } }
-      : { bg: '#ece0db', badge: 'bg-[#4d4542]/10 text-[#4d4542]',  icon: 'text-[#4d4542]', text: 'text-[#201a17]',     slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60', white: false } };
+      ? { bg: '#eff4ff', badge: 'bg-primary/10 text-primary',      icon: 'text-primary',   text: 'text-on-background', label: 'text-outline'      }
+      : { bg: '#ece0db', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]',     label: 'text-[#4d4542]/60' };
     if (score >= 5) return isNorth
-      ? { bg: '#dce1fd', badge: 'bg-secondary/10 text-secondary',   icon: 'text-secondary', text: 'text-on-background', slot: { text: 'text-secondary', label: 'text-outline',      white: false } }
-      : { bg: '#d0c4bf', badge: 'bg-[#4d4542]/10 text-[#4d4542]',  icon: 'text-[#4d4542]', text: 'text-[#201a17]',     slot: { text: 'text-[#4d4542]', label: 'text-[#4d4542]/60', white: false } };
+      ? { bg: '#dce1fd', badge: 'bg-secondary/10 text-secondary',  icon: 'text-secondary', text: 'text-on-background', label: 'text-outline'      }
+      : { bg: '#d0c4bf', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]',     label: 'text-[#4d4542]/60' };
     if (score >= 3) return isNorth
-      ? { bg: '#8fa8d4', badge: 'bg-white/20 text-white',           icon: 'text-white',     text: 'text-white',         slot: { text: 'text-white',     label: 'text-white/70',     white: true  } }
-      : { bg: '#9e9ab0', badge: 'bg-white/20 text-white',           icon: 'text-white',     text: 'text-white',         slot: { text: 'text-white',     label: 'text-white/70',     white: true  } };
+      ? { bg: '#c0c5e0', badge: 'bg-secondary/10 text-secondary',  icon: 'text-secondary', text: 'text-on-background', label: 'text-outline'      }
+      : { bg: '#b8b4c8', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]',     label: 'text-[#4d4542]/60' };
     return isNorth
-      ? { bg: '#5c7aaa', badge: 'bg-white/20 text-white',           icon: 'text-white',     text: 'text-white',         slot: { text: 'text-white',     label: 'text-white/70',     white: true  } }
-      : { bg: '#6b6680', badge: 'bg-white/20 text-white',           icon: 'text-white',     text: 'text-white',         slot: { text: 'text-white',     label: 'text-white/70',     white: true  } };
+      ? { bg: '#d3e4fe', badge: 'bg-primary/10 text-primary',      icon: 'text-primary',   text: 'text-on-background', label: 'text-outline'      }
+      : { bg: '#c8c4d8', badge: 'bg-[#4d4542]/10 text-[#4d4542]', icon: 'text-[#4d4542]', text: 'text-[#201a17]',     label: 'text-[#4d4542]/60' };
   };
 
   // Direction summary
@@ -160,16 +172,14 @@ function renderTodayCard(day) {
     return             { icon: 'foggy',             label: 'Obscured', desc: 'Not Visible'       };
   };
 
-  const slotBox = (slot, s) => {
+  const slotBox = (slot, isNorth, labelCls) => {
     const score = slot?.score ?? null;
     const pct = score != null ? (score * 10) + '%' : '—';
-    // Dark cards: white/30 bg with opacity tied to score. Light cards: white with opacity.
-    const bg = s.white
-      ? `rgba(255,255,255,${slotOpacity(score)})`
-      : `rgba(255,255,255,${slotOpacity(score)})`;
+    const bg = `rgba(255,255,255,${slotOpacity(score)})`;
+    const textCls = slotTextColor(score, isNorth);
     return `<div class="rounded-2xl p-3 flex-1" style="background:${bg}">
-      <p class="font-label text-[10px] ${s.label} uppercase tracking-tighter mb-1">{SLOT}</p>
-      <p class="font-headline font-extrabold text-xl ${s.text}">${pct}</p>
+      <p class="font-label text-[10px] ${labelCls} uppercase tracking-tighter mb-1">{SLOT}</p>
+      <p class="font-headline font-extrabold text-xl ${textCls}">${pct}</p>
     </div>`;
   };
 
@@ -190,8 +200,8 @@ function renderTodayCard(day) {
       </div>
       <h3 class="relative z-10 font-headline text-2xl font-bold mt-auto mb-2 ${nt.text}">${ns.desc}</h3>
       <div class="relative z-10 flex gap-3">
-        ${slotBox(north.morning, nt.slot).replace('{SLOT}', 'Morning')}
-        ${slotBox(north.afternoon, nt.slot).replace('{SLOT}', 'Afternoon')}
+        ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
+        ${slotBox(north.afternoon, true, nt.label).replace('{SLOT}', 'Afternoon')}
       </div>
     </div>`;
 
@@ -208,8 +218,8 @@ function renderTodayCard(day) {
       </div>
       <h3 class="font-headline text-2xl font-bold mt-auto mb-2 ${st.text}">${ss.desc}</h3>
       <div class="flex gap-3">
-        ${slotBox(south.morning, st.slot).replace('{SLOT}', 'Morning')}
-        ${slotBox(south.afternoon, st.slot).replace('{SLOT}', 'Afternoon')}
+        ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
+        ${slotBox(south.afternoon, false, st.label).replace('{SLOT}', 'Afternoon')}
       </div>
     </div>`;
 
@@ -238,23 +248,28 @@ function renderForecastCard(day) {
   const icon = scoreIcon(top);
   const label = scoreLabel(top);
 
-  // Forecast card styles based on score
+  // Forecast cards — from Stitch design:
+  // High (8-10): bg-surface-container-low, bg-primary icon circle, text-primary label
+  // Med  (5-7):  bg-tertiary-fixed-dim,    bg-[#d0c4bf] icon circle, text-tertiary label
+  // Low  (3-4):  bg-secondary-fixed-dim,   bg-secondary-container icon, text-secondary
+  // Hidden(0-2): bg-secondary-fixed-dim opacity-70, bg-secondary-container, text-outline
+  const fcLabel = top >= 8 ? 'High' : top >= 5 ? 'Med' : top >= 3 ? 'Low' : 'None';
   const fcStyles = top >= 8
-    ? { bg: '#eff4ff', dateColor: 'text-outline',     iconBg: 'bg-primary',        iconText: 'text-white',   pctColor: 'text-primary',   lblColor: 'text-primary'   }
+    ? { bg: '#eff4ff', dateColor: 'text-outline',     iconBg: 'bg-primary',    iconText: 'text-white',       lblColor: 'text-primary'   }
     : top >= 5
-    ? { bg: '#dce1fd', dateColor: 'text-outline',     iconBg: 'bg-secondary',      iconText: 'text-white',   pctColor: 'text-secondary', lblColor: 'text-secondary' }
+    ? { bg: '#d0c4bf', dateColor: 'text-[#201a17]',   iconBg: 'bg-[#ece0db]', iconText: 'text-[#201a17]',   lblColor: 'text-[#625a56]' }
     : top >= 3
-    ? { bg: '#8fa8d4', dateColor: 'text-white/70',    iconBg: 'bg-white/30',       iconText: 'text-white',   pctColor: 'text-white',     lblColor: 'text-white/80'  }
-    : { bg: '#5c7aaa', dateColor: 'text-white/60',    iconBg: 'bg-white/20',       iconText: 'text-white',   pctColor: 'text-white',     lblColor: 'text-white/70'  };
+    ? { bg: '#c0c5e0', dateColor: 'text-on-background', iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary', lblColor: 'text-secondary'  }
+    : { bg: '#c0c5e0', dateColor: 'text-outline',     iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',   lblColor: 'text-outline',   opacity: '0.7' };
 
   return `
-    <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcStyles.bg}">
-      <p class="font-label text-[10px] ${fcStyles.dateColor} font-bold tracking-widest uppercase">${weekday} ${month}</p>
+    <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcStyles.bg};opacity:${fcStyles.opacity ?? 1}">
+      <p class="font-label text-[10px] ${fcStyles.dateColor} font-bold tracking-widest uppercase">${weekday}</p>
       <div class="w-11 h-11 rounded-full flex items-center justify-center ${fcStyles.iconBg} ${fcStyles.iconText}">
         <span class="material-symbols-outlined text-[20px]">${icon}</span>
       </div>
       <div>
-        <p class="font-headline font-extrabold text-base ${fcStyles.pctColor}">${top > 0 ? (top * 10) + '%' : '—'}</p>
+        <p class="font-headline font-extrabold text-xl">${fcLabel}</p>
         <p class="font-label text-[10px] ${fcStyles.lblColor} uppercase font-bold">${label}</p>
       </div>
     </article>`;
