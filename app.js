@@ -184,7 +184,7 @@ function renderTodayCard(day) {
   };
 
   // Fuji silhouette SVG for north card background
-  const fujiSilhouette = `<svg class="absolute -right-4 -bottom-2 opacity-[0.12] pointer-events-none" width="180" height="100" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"><path d="M0 340 L100 295 L195 245 L290 185 L355 130 L388 92 L400 68 L412 92 L445 130 L510 185 L605 245 L700 295 L800 340 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
+  const fujiSilhouette = `<svg class="absolute -right-6 bottom-0 opacity-[0.15] pointer-events-none" width="260" height="160" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"><path d="M0 340 L100 295 L195 245 L290 185 L355 130 L388 92 L400 68 L412 92 L445 130 L510 185 L605 245 L700 295 L800 340 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
 
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
@@ -198,7 +198,7 @@ function renderTodayCard(day) {
           <span class="font-headline font-bold text-sm">${ns.label}</span>
         </div>
       </div>
-      <h3 class="relative z-10 font-headline text-2xl font-bold mt-auto mb-2 ${nt.text}">${ns.desc}</h3>
+      <h3 class="relative z-10 font-headline text-2xl font-bold mt-auto ${nt.text}">${ns.desc}</h3>
       <div class="relative z-10 flex gap-3">
         ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
         ${slotBox(north.afternoon, true, nt.label).replace('{SLOT}', 'Afternoon')}
@@ -216,7 +216,7 @@ function renderTodayCard(day) {
           <span class="font-headline font-bold text-sm">${ss.label}</span>
         </div>
       </div>
-      <h3 class="font-headline text-2xl font-bold mt-auto mb-2 ${st.text}">${ss.desc}</h3>
+      <h3 class="font-headline text-2xl font-bold mt-auto ${st.text}">${ss.desc}</h3>
       <div class="flex gap-3">
         ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
         ${slotBox(south.afternoon, false, st.label).replace('{SLOT}', 'Afternoon')}
@@ -249,18 +249,18 @@ function renderForecastCard(day) {
   const label = scoreLabel(top);
 
   // Forecast cards — from Stitch design:
-  // High (8-10): bg-surface-container-low, bg-primary icon circle, text-primary label
-  // Med  (5-7):  bg-tertiary-fixed-dim,    bg-[#d0c4bf] icon circle, text-tertiary label
-  // Low  (3-4):  bg-secondary-fixed-dim,   bg-secondary-container icon, text-secondary
-  // Hidden(0-2): bg-secondary-fixed-dim opacity-70, bg-secondary-container, text-outline
+  // High (8-10): #eff4ff light blue,  primary icon
+  // Med  (5-7):  #d0c4bf warm beige,  tertiary icon
+  // Low  (3-4):  #c0c5e0 slate blue,  secondary icon
+  // None (0-2):  #c0c5e0 slate blue opacity 70%, secondary icon
   const fcLabel = top >= 8 ? 'High' : top >= 5 ? 'Med' : top >= 3 ? 'Low' : 'None';
   const fcStyles = top >= 8
-    ? { bg: '#eff4ff', dateColor: 'text-outline',     iconBg: 'bg-primary',    iconText: 'text-white',       lblColor: 'text-primary'   }
+    ? { bg: '#eff4ff', dateColor: 'text-outline',       iconBg: 'bg-primary',    iconText: 'text-white',     lblColor: 'text-primary'   }
     : top >= 5
-    ? { bg: '#d0c4bf', dateColor: 'text-[#201a17]',   iconBg: 'bg-[#ece0db]', iconText: 'text-[#201a17]',   lblColor: 'text-[#625a56]' }
+    ? { bg: '#d0c4bf', dateColor: 'text-[#4d4542]',     iconBg: 'bg-[#ece0db]', iconText: 'text-[#4d4542]', lblColor: 'text-[#625a56]' }
     : top >= 3
-    ? { bg: '#c0c5e0', dateColor: 'text-on-background', iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary', lblColor: 'text-secondary'  }
-    : { bg: '#c0c5e0', dateColor: 'text-outline',     iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',   lblColor: 'text-outline',   opacity: '0.7' };
+    ? { bg: '#c0c5e0', dateColor: 'text-on-background', iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',  lblColor: 'text-secondary' }
+    : { bg: '#c0c5e0', dateColor: 'text-outline',       iconBg: 'bg-[#dce1fd]', iconText: 'text-secondary',  lblColor: 'text-outline',  opacity: '0.7' };
 
   return `
     <article class="rounded-2xl p-4 flex flex-col items-center text-center space-y-3" style="background:${fcStyles.bg};opacity:${fcStyles.opacity ?? 1}">
