@@ -131,37 +131,63 @@ function renderTodayCard(day) {
 
   const headline = topScore >= 8 ? 'VISIBLE' : topScore >= 5 ? 'PARTIAL' : topScore >= 3 ? 'HAZY' : 'NOT VISIBLE';
 
-  // opacity 40%→100% based on score (score 0→10)
-  const slotOpacity = (score) => score != null ? Math.max(0.35, score / 10) : 0.35;
+  // Less visibility = more opaque (draws attention to bad conditions)
+  const slotOpacity = (score) => {
+    if (score == null) return 1;
+    return 1 - (score / 10) * 0.6; // score 10 → 0.4, score 0 → 1.0
+  };
 
-  const slotBox = (slot, isNorth) => {
+  // Direction-level summary (best of morning/afternoon)
+  const dirSummary = (dir) => {
+    const s = Math.max(dir.morning?.score ?? 0, dir.afternoon?.score ?? 0);
+    if (s >= 8) return { icon: 'light_mode',        label: 'Clear',    desc: 'Excellent Clarity' };
+    if (s >= 5) return { icon: 'partly_cloudy_day', label: 'Hazy',     desc: 'Partial View'      };
+    if (s >= 3) return { icon: 'cloud',             label: 'Cloudy',   desc: 'Limited View'      };
+    return             { icon: 'foggy',             label: 'Obscured', desc: 'Not Visible'       };
+  };
+
+  const slotBox = (slot, textColor, labelColor) => {
     const score = slot?.score ?? null;
     const pct = score != null ? (score * 10) + '%' : '—';
     const opacity = slotOpacity(score);
-    const textColor = isNorth ? 'text-primary' : 'text-[#4d4542]';
-    const labelColor = isNorth ? 'text-outline' : 'text-[#4d4542]/60';
-    return `<div class="rounded-2xl p-3 flex-1" style="background:rgba(255,255,255,${opacity})">
+    return `<div class="rounded-2xl p-3 flex-1" style="background:rgba(255,255,255,${opacity.toFixed(2)})">
       <p class="font-label text-[10px] ${labelColor} uppercase tracking-tighter mb-1">{SLOT}</p>
       <p class="font-headline font-extrabold text-xl ${textColor}">${pct}</p>
       <p class="font-label text-[9px] ${labelColor} mt-0.5">${slot?.status ?? ''}</p>
     </div>`;
   };
 
+  const ns = dirSummary(north);
   const northCard = `
-    <div class="rounded-3xl bg-surface-container-low p-6 flex flex-col gap-4">
-      <span class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label text-[10px] font-bold tracking-widest uppercase self-start">North · Kawaguchiko</span>
+    <div class="rounded-3xl bg-surface-container-low p-6 flex flex-col gap-3">
+      <div class="flex justify-between items-start">
+        <span class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label text-[10px] font-bold tracking-widest uppercase">North · Kawaguchiko</span>
+        <div class="flex items-center gap-1 text-primary">
+          <span class="material-symbols-outlined text-[18px]">${ns.icon}</span>
+          <span class="font-headline font-bold text-sm">${ns.label}</span>
+        </div>
+      </div>
+      <h3 class="font-headline text-2xl font-bold text-on-background">${ns.desc}</h3>
       <div class="flex gap-3">
-        ${slotBox(north.morning, true).replace('{SLOT}', 'Morning')}
-        ${slotBox(north.afternoon, true).replace('{SLOT}', 'Afternoon')}
+        ${slotBox(north.morning, 'text-primary', 'text-outline').replace('{SLOT}', 'Morning')}
+        ${slotBox(north.afternoon, 'text-primary', 'text-outline').replace('{SLOT}', 'Afternoon')}
       </div>
     </div>`;
 
+  const ss = dirSummary(south);
   const southCard = `
-    <div class="rounded-3xl bg-[#ece0db] p-6 flex flex-col gap-4">
-      <span class="px-3 py-1 rounded-full bg-[#4d4542]/10 text-[#4d4542] font-label text-[10px] font-bold tracking-widest uppercase self-start">South · Hakone</span>
+    <div class="rounded-3xl bg-[#ece0db] p-6 flex flex-col gap-3">
+      <div class="flex justify-between items-start">
+        <span class="px-3 py-1 rounded-full bg-[#4d4542]/10 text-[#4d4542] font-label text-[10px] font-bold tracking-widest uppercase">South · Hakone</span>
+        <div class="flex items-center gap-1 text-[#4d4542]">
+          <span class="material-symbols-outlined text-[18px]">${ss.icon}</span>
+          <span class="font-headline font-bold text-sm">${ss.label}</span>
+        </div>
+      </div>
+      <h3 class="font-headline text-2xl font-bold text-[#201a17]">${ss.desc}</h3>
       <div class="flex gap-3">
-        ${slotBox(south.morning, false).replace('{SLOT}', 'Morning')}
-        ${slotBox(south.afternoon, false).replace('{SLOT}', 'Afternoon')}
+        ${slotBox(south.morning, 'text-[#4d4542]', 'text-[#4d4542]/60').replace('{SLOT}', 'Morning')}
+        ${slotBox(south.afternoon, 'text-[#4d4542]', 'text-[#4d4542]/60').replace('{SLOT}', 'Afternoon')}
       </div>
     </div>`;
 
