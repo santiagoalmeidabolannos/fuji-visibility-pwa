@@ -392,9 +392,88 @@ async function loadForecast() {
   }
 }
 
+// ── Navigation ────────────────────────────────
+function navigateTo(page) {
+  const homeEl    = document.getElementById('page-home') ?? document.querySelector('main:not([id])');
+  const camerasEl = document.getElementById('page-cameras');
+  const navHome   = document.getElementById('nav-home');
+  const navCams   = document.getElementById('nav-cameras');
+
+  // Use the first <main> as home if no id set
+  const homePage = document.querySelector('main:not(#page-cameras)');
+
+  if (page === 'cameras') {
+    if (homePage)   homePage.classList.add('hidden');
+    if (camerasEl)  camerasEl.classList.remove('hidden');
+    navHome.className = 'flex items-center justify-center text-outline h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150';
+    navCams.className = 'flex items-center justify-center bg-primary text-white rounded-full h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150';
+  } else {
+    if (homePage)   homePage.classList.remove('hidden');
+    if (camerasEl)  camerasEl.classList.add('hidden');
+    navHome.className = 'flex items-center justify-center bg-primary text-white rounded-full h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150';
+    navCams.className = 'flex items-center justify-center text-outline h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150';
+  }
+}
+
+// ── Live cameras ──────────────────────────────
+const CAMERAS_API = 'https://fuji-visibility-api.onrender.com/cameras';
+let camRefreshTimer = null;
+
+function thumbUrl(youtubeId) {
+  // Cache-bust every 10 min so browser re-fetches the live thumbnail
+  const bucket = Math.floor(Date.now() / (10 * 60 * 1000));
+  return `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg?_=${bucket}`;
+}
+
+function renderCameraCard(cam) {
+  const href = cam.channelId
+    ? `https://www.youtube.com/channel/${cam.channelId}/live`
+    : `https://www.youtube.com/watch?v=${cam.youtubeId}`;
+  return `
+    <a href="${href}" target="_blank" rel="noopener noreferrer"
+       class="group block rounded-2xl overflow-hidden bg-surface-container-low border border-transparent hover:border-outline-variant/20 transition-all">
+      <div class="relative aspect-video overflow-hidden">
+        <img src="${thumbUrl(cam.youtubeId)}"
+             alt="${cam.name ?? 'Live camera'}"
+             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+        <div class="absolute inset-0 bg-on-background/0 group-hover:bg-on-background/10 transition-all duration-200"></div>
+        <span class="absolute top-3 left-3 bg-error text-white font-label text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full">● LIVE</span>
+      </div>
+      <div class="p-4">
+        <p class="font-headline font-bold text-sm text-on-background truncate">${cam.name ?? 'Mt. Fuji Camera'}</p>
+        ${cam.location ? `<p class="font-label text-[10px] text-outline mt-0.5">${cam.location}</p>` : ''}
+      </div>
+    </a>`;
+}
+
+async function loadCameras() {
+  try {
+    const res = await fetch(CAMERAS_API, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const cameras = data.cameras ?? [];
+
+    const northEl = document.getElementById('cams-north');
+    const southEl = document.getElementById('cams-south');
+
+    const north = cameras.filter(c => c.side === 'north');
+    const south = cameras.filter(c => c.side === 'south');
+
+    if (northEl) northEl.innerHTML = north.length ? north.map(renderCameraCard).join('') : '<p class="text-outline text-sm">No north cameras available.</p>';
+    if (southEl) southEl.innerHTML = south.length ? south.map(renderCameraCard).join('') : '<p class="text-outline text-sm">No south cameras available.</p>';
+
+    // Schedule thumbnail refresh every 10 min
+    if (camRefreshTimer) clearTimeout(camRefreshTimer);
+    camRefreshTimer = setTimeout(loadCameras, 10 * 60 * 1000);
+  } catch (err) {
+    console.warn('Failed to load cameras:', err);
+  }
+}
+
 // ── Online / offline listeners ────────────────
 window.addEventListener('online',  () => { setOfflineBadge(false); loadForecast(); });
 window.addEventListener('offline', () => setOfflineBadge(true));
 
 // ── Boot ──────────────────────────────────────
 loadForecast();
+loadCameras();

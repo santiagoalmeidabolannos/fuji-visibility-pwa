@@ -78,7 +78,7 @@
     <div id="network-badge" class="hidden px-3 py-1 rounded-full bg-error/10 text-error font-label text-[10px] font-bold tracking-widest uppercase">Offline</div>
   </header>
 
-  <main class="pt-24 pb-12 px-6 max-w-5xl mx-auto space-y-12">
+  <main class="pt-24 pb-32 px-6 max-w-5xl mx-auto space-y-12">
 
     <!-- Hero Section: Today's Visibility -->
     <section aria-label="Today's visibility">
@@ -120,6 +120,36 @@
     <p id="last-updated" class="sr-only" aria-live="polite"></p>
 
   </main>
+
+  <!-- Cameras Page (hidden by default) -->
+  <main id="page-cameras" class="hidden pt-24 pb-32 px-6 max-w-5xl mx-auto space-y-8">
+    <div>
+      <h1 class="font-headline text-4xl font-extrabold tracking-tighter text-on-background">Live Cameras</h1>
+      <p class="font-label text-sm text-outline mt-1">Thumbnails refresh every 10 minutes · Tap to watch live</p>
+    </div>
+    <!-- North cameras -->
+    <div>
+      <h2 class="font-headline text-lg font-bold tracking-tight mb-4 text-outline uppercase text-sm tracking-widest">North · Kawaguchiko</h2>
+      <div id="cams-north" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+    <!-- South cameras -->
+    <div>
+      <h2 class="font-headline text-lg font-bold tracking-tight mb-4 text-outline uppercase text-sm tracking-widest">South · Hakone</h2>
+      <div id="cams-south" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="fixed bottom-6 left-0 right-0 flex justify-center items-center z-50">
+    <div class="bg-white/40 backdrop-blur-2xl shadow-[0_8px_32px_rgba(11,28,48,0.06)] rounded-full px-4 py-2 flex justify-around items-center w-[90%] max-w-md">
+      <button id="nav-home" onclick="navigateTo('home')" class="flex items-center justify-center bg-primary text-white rounded-full h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150">
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">landscape</span>
+      </button>
+      <button id="nav-cameras" onclick="navigateTo('cameras')" class="flex items-center justify-center text-outline h-12 w-12 hover:scale-110 transition-transform active:scale-90 duration-150">
+        <span class="material-symbols-outlined">videocam</span>
+      </button>
+    </div>
+  </nav>
 
 
   <script src="/app.js"></script>
