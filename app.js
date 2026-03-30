@@ -177,29 +177,29 @@ function renderTodayCard(day) {
     const pct = score != null ? (score * 10) + '%' : '—';
     const bg = `rgba(255,255,255,${slotOpacity(score)})`;
     const textCls = slotTextColor(score, isNorth);
-    return `<div class="rounded-2xl p-3 flex-1" style="background:${bg}">
-      <p class="font-label text-[10px] ${labelCls} uppercase tracking-tighter mb-1">{SLOT}</p>
+    return `<div style="border-radius:1rem;padding:12px;flex:1;background:${bg}">
+      <p class="font-label text-[10px] ${labelCls} uppercase tracking-tighter" style="margin-bottom:4px">{SLOT}</p>
       <p class="font-headline font-extrabold text-xl ${textCls}">${pct}</p>
     </div>`;
   };
 
-  // Fuji silhouette — large SVG anchored bottom-right, overflow-hidden on card clips it naturally
-  const fujiSilhouette = `<svg class="absolute -right-8 bottom-0 opacity-[0.18] pointer-events-none" width="360" height="220" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"><path d="M0 340 L100 295 L195 245 L290 185 L355 130 L388 92 L400 68 L412 92 L445 130 L510 185 L605 245 L700 295 L800 340 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
+  // Fuji silhouette — inline styles only (Tailwind CDN doesn't JIT dynamic classes)
+  const fujiSilhouette = `<svg style="position:absolute;right:-32px;bottom:-16px;opacity:0.18;pointer-events:none" width="320" height="200" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"><path d="M0 340 L100 295 L195 245 L290 185 L355 130 L388 92 L400 68 L412 92 L445 130 L510 185 L605 245 L700 295 L800 340 Z" fill="currentColor"/><path d="M376 124 L389 90 L400 68 L411 90 L424 124 L418 136 L408 144 L400 146 L392 144 L382 136 Z" fill="white" opacity="0.6"/></svg>`;
 
   const ns = dirSummary(north);
   const nt = cardTheme(Math.max(north.morning?.score ?? 0, north.afternoon?.score ?? 0), true);
   const northCard = `
-    <div class="relative overflow-hidden rounded-3xl pt-6 px-6 pb-0 flex flex-col min-h-[220px]" style="background:${nt.bg}">
+    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:220px;background:${nt.bg}">
       ${fujiSilhouette}
-      <div class="relative z-10 flex justify-between items-start">
+      <div style="position:relative;z-index:10;display:flex;justify-content:space-between;align-items:flex-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${nt.badge}">North · Kawaguchiko</span>
         <div class="flex items-center gap-1 ${nt.icon}">
           <span class="material-symbols-outlined text-[18px]">${ns.icon}</span>
           <span class="font-headline font-bold text-sm">${ns.label}</span>
         </div>
       </div>
-      <h3 class="relative z-10 font-headline text-2xl font-bold mt-auto mb-4 ${nt.text}">${ns.desc}</h3>
-      <div class="relative z-10 flex gap-3 pb-6">
+      <h3 style="position:relative;z-index:10;margin-top:auto;margin-bottom:16px" class="font-headline text-2xl font-bold ${nt.text}">${ns.desc}</h3>
+      <div style="position:relative;z-index:10;display:flex;gap:12px;padding-bottom:1.5rem">
         ${slotBox(north.morning, true, nt.label).replace('{SLOT}', 'Morning')}
         ${slotBox(north.afternoon, true, nt.label).replace('{SLOT}', 'Afternoon')}
       </div>
@@ -208,16 +208,16 @@ function renderTodayCard(day) {
   const ss = dirSummary(south);
   const st = cardTheme(Math.max(south.morning?.score ?? 0, south.afternoon?.score ?? 0), false);
   const southCard = `
-    <div class="relative overflow-hidden rounded-3xl pt-6 px-6 pb-0 flex flex-col min-h-[220px]" style="background:${st.bg}">
-      <div class="flex justify-between items-start">
+    <div style="position:relative;overflow:hidden;border-radius:1.5rem;padding:1.5rem 1.5rem 0;display:flex;flex-direction:column;min-height:220px;background:${st.bg}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
         <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold tracking-widest uppercase ${st.badge}">South · Hakone</span>
         <div class="flex items-center gap-1 ${st.icon}">
           <span class="material-symbols-outlined text-[18px]">${ss.icon}</span>
           <span class="font-headline font-bold text-sm">${ss.label}</span>
         </div>
       </div>
-      <h3 class="font-headline text-2xl font-bold mt-auto mb-4 ${st.text}">${ss.desc}</h3>
-      <div class="flex gap-3 pb-6">
+      <h3 style="margin-top:auto;margin-bottom:16px" class="font-headline text-2xl font-bold ${st.text}">${ss.desc}</h3>
+      <div style="display:flex;gap:12px;padding-bottom:1.5rem">
         ${slotBox(south.morning, false, st.label).replace('{SLOT}', 'Morning')}
         ${slotBox(south.afternoon, false, st.label).replace('{SLOT}', 'Afternoon')}
       </div>
