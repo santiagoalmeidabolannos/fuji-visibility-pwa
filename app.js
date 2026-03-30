@@ -49,21 +49,26 @@ function bestScore(day) {
 }
 
 // ── Date formatting ───────────────────────────
+// API returns dates like "Mon, Mar 30" — use them directly
+
 function formatDateHeader(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  // e.g. "Mon, Mar 30" → "Monday, March 30"
+  const parts = dateStr.match(/^(\w+),\s+(\w+)\s+(\d+)$/);
+  if (!parts) return dateStr;
+  const days = { Mon:'Monday', Tue:'Tuesday', Wed:'Wednesday', Thu:'Thursday', Fri:'Friday', Sat:'Saturday', Sun:'Sunday' };
+  const months = { Jan:'January', Feb:'February', Mar:'March', Apr:'April', May:'May', Jun:'June', Jul:'July', Aug:'August', Sep:'September', Oct:'October', Nov:'November', Dec:'December' };
+  return `${days[parts[1]] ?? parts[1]}, ${months[parts[2]] ?? parts[2]} ${parts[3]}`;
 }
 
 function formatDateShort(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00');
-  const weekday = d.toLocaleDateString('en-US', { weekday: 'short' });
-  const month   = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  return { weekday, month };
+  // e.g. "Mon, Mar 30" → { weekday: "Mon", month: "Mar 30" }
+  const parts = dateStr.match(/^(\w+),\s+(\w+\s+\d+)$/);
+  if (!parts) return { weekday: dateStr, month: '' };
+  return { weekday: parts[1], month: parts[2] };
 }
 
-function isToday(dateStr) {
-  const today = new Date().toISOString().slice(0, 10);
-  return dateStr === today;
+function isToday(day) {
+  return day.isToday === true;
 }
 
 // ── SVG mood ──────────────────────────────────
@@ -181,7 +186,7 @@ function renderData(data) {
   const forecast = data.forecast ?? [];
 
   // Find today's entry (first entry, or the one matching today's date)
-  const todayEntry = forecast.find(d => isToday(d.date)) ?? forecast[0];
+  const todayEntry = forecast.find(d => isToday(d)) ?? forecast[0];
   if (todayEntry) renderTodayCard(todayEntry);
 
   // Remaining days go to the 7-day list (skip today)
