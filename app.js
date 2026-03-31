@@ -228,6 +228,7 @@ function renderTodayCard(day) {
       <div>
         <p class="font-label text-sm uppercase tracking-[0.2em] text-outline mb-1">${formatDateHeader(day.date)}</p>
         <h1 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter text-on-background">${headline}</h1>
+        <p class="mt-3 font-body text-base text-outline max-w-xl leading-relaxed">Your daily guide to Mount Fuji visibility conditions and real-time tracking.</p>
       </div>
       <div class="text-right">
         <p class="font-label text-[10px] uppercase tracking-widest text-outline">Last Updated</p>
